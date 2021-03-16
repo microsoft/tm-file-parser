@@ -29,6 +29,11 @@ steps:
     projects: '**/*.csproj'
     arguments: '--collect "Code coverage"'
 
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
