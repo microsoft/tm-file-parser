@@ -29,6 +29,11 @@ steps:
     projects: '**/*.csproj'
     arguments: '--collect "Code coverage"'
 
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.cobertura.xml'
+
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'VSTest'
