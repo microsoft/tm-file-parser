@@ -21,12 +21,12 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '**/*.csproj'
+    projects: '../**/*.csproj'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: '**/*.csproj'
+    projects: '../**/*.csproj'
     arguments: '--collect "Code coverage"'
 
 
