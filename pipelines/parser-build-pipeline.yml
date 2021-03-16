@@ -21,7 +21,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '../TMFileParser\**/*.csproj'
+    projects: '../TMFileParser\/**/*.csproj'
 
 - task: DotNetCoreCLI@2
   inputs:
