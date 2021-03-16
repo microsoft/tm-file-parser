@@ -32,7 +32,7 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: 'TMFileParser\TMFileParser\TMFileParser.csproj'
+    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '1'
     minorVersion: '0'
