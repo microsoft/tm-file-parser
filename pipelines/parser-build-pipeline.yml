@@ -21,19 +21,19 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
-    projects: '../**/*.csproj'
+    projects: '../TMFileParser\**/*.csproj'
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
-    projects: '../**/*.csproj'
+    projects: '../TMFileParser\**/*.csproj'
     arguments: '--collect "Code coverage"'
 
 
 - task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
-    packagesToPack: 'TMFileParser\TMFileParser\TMFileParser.csproj'
+    packagesToPack: '../TMFileParser\TMFileParser\TMFileParser.csproj'
     versioningScheme: 'byPrereleaseNumber'
     majorVersion: '1'
     minorVersion: '0'
