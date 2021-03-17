@@ -25,3 +25,9 @@ steps:
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
     arguments: '-r win-x64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
