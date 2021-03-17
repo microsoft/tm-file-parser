@@ -10,8 +10,6 @@ namespace TMFileParser.Models.tm7
     [XmlRoot("ThreatModel")]
     public class TM7ThreatModel
     {
-        public const string TMNameSpace = "http://schemas.datacontract.org/2004/07/ThreatModeling.Model";
-
         [XmlElement("DrawingSurfaceModel")]
         public TM7DrawingSurfaceList drawingSurfaceList { get; set; }
 
