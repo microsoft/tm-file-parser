@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Abstractions;
+using System.Xml;
 using System.Xml.Serialization;
 using TMFileParser.Models.tb7;
 using TMFileParser.Models.tm7;
@@ -48,23 +49,39 @@ namespace TMFileParser
 
             if (fileExtension == ".tm7")
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), new XmlRootAttribute("ThreatModel"));
-                return (TM7ThreatModel)serializer.Deserialize(stringReader);
-
+                TM7ThreatModel obj;
+                using (TextReader textReader = new StringReader(processedFileContent))
+                {
+                    using (XmlTextReader reader = new XmlTextReader(textReader))
+                    {
+                        reader.Namespaces = false;
+                        XmlSerializer aserializer = new XmlSerializer(typeof(TM7ThreatModel));
+                        obj = (TM7ThreatModel)aserializer.Deserialize(reader);
+                    }
+                }          
+                return obj;
             }
             else
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(TB7KnowledgeBase), new XmlRootAttribute("KnowledgeBase"));
-                return (TB7KnowledgeBase)serializer.Deserialize(stringReader);
+                TB7KnowledgeBase obj;
+                using (TextReader textReader = new StringReader(processedFileContent))
+                {
+                    using (XmlTextReader reader = new XmlTextReader(textReader))
+                    {
+                        reader.Namespaces = false;
+                        XmlSerializer aserializer = new XmlSerializer(typeof(TB7KnowledgeBase));
+                        obj = (TB7KnowledgeBase)aserializer.Deserialize(reader);
+                    }
+                }
+                return obj;
             }
         }
 
         private string PreProcess(string fileContent, string fileExtension)
         {
-            if(fileExtension == ".tm7")
+            if (fileExtension == ".tm7")
             {
-                string tmNameSpace = "xmlns=\"http://schemas.datacontract.org/2004/07/ThreatModeling.Model\"";
-                fileContent = fileContent.Replace(tmNameSpace, "");
+                //Add steps to preprocess the file if required
             }
             return fileContent;
         }

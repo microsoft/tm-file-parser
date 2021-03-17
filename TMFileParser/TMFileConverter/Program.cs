@@ -1,7 +1,7 @@
 ﻿using System;
 using TMFileParser;
 
-namespace TMFileParserApp
+namespace TMFileConverter
 {
     class Program
     {
