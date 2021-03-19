@@ -23,7 +23,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
@@ -31,7 +31,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-r win-x64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
