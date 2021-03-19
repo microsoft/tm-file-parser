@@ -23,6 +23,14 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r ubuntu.16.04-x64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
     arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True --self-contained false -o $(Build.ArtifactStagingDirectory)'
     zipAfterPublish: false
 
