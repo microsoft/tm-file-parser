@@ -23,7 +23,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux'
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
@@ -31,7 +31,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/ios'
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
@@ -39,7 +39,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)'
+    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows'
     zipAfterPublish: false
 
 - task: PublishBuildArtifacts@1
