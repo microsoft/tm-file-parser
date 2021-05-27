@@ -17,7 +17,11 @@ namespace TMFileParser.Models.tb7
         public TB7ThreatMetaData threatMetaData { get; set; }
 
         [XmlElement("GenericElements")]
-        public List<ElementType> genericElements { get; set; }
+        public TB7GenericElements genericElements { get; set; }
+        [XmlElement("ThreatCategories")]
+        public TB7ThreatCategories threatCategories { get; set; }
+        [XmlElement("ThreatTypes")]
+        public TB7ThreatTypes threatTypes { get; set; }
     }
 
 }

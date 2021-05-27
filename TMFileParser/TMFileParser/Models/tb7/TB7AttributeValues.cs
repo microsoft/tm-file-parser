@@ -7,9 +7,9 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tb7
 {
     [ExcludeFromCodeCoverage]
-    public class ElementType
+    public class TB7AttributeValues
     {
-        [XmlElement("Name")]
-        public string name { get; set; }
+        [XmlElement("Value")]
+        public List<string> value { get; set; }
     }
 }

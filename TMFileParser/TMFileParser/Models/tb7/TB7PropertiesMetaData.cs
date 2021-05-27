@@ -8,6 +8,6 @@ namespace TMFileParser.Models.tb7
     public class TB7PropertiesMetaData
     {
         [XmlElement("ThreatMetaDatum")]
-        public List<TB7ThreatMetaDatum> threatMetaDatumList { get; set; }
+        public List<TB7ThreatMetaDatum> threatMetaDatum { get; set; }
     }
 }

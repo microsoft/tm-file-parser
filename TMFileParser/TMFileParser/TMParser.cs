@@ -25,7 +25,8 @@ namespace TMFileParser
             if (string.IsNullOrWhiteSpace(filePath))
             {
                 throw new ArgumentNullException(String.Format("Invalid or Empty file path."));
-            }else
+            }
+            else
             {
                 string fileExtension = Path.GetExtension(filePath);
                 if (fileExtension != ".tb7" && fileExtension != ".tm7")
@@ -48,7 +49,7 @@ namespace TMFileParser
 
             if (fileExtension == ".tm7")
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), new XmlRootAttribute("ThreatModel"));
+                XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), "http://schemas.datacontract.org/2004/07/ThreatModeling.Model");
                 return (TM7ThreatModel)serializer.Deserialize(stringReader);
 
             }
@@ -61,13 +62,15 @@ namespace TMFileParser
 
         private string PreProcess(string fileContent, string fileExtension)
         {
-            if(fileExtension == ".tm7")
+            if (fileExtension == ".tm7")
             {
-                string tmNameSpace = "xmlns=\"http://schemas.datacontract.org/2004/07/ThreatModeling.Model\"";
-                fileContent = fileContent.Replace(tmNameSpace, "");
+                fileContent = fileContent.Replace("a:", "");
+                fileContent = fileContent.Replace("b:", "");
+                fileContent = fileContent.Replace("i:", "");
+                fileContent = fileContent.Replace("z:", "");
             }
             return fileContent;
         }
-        
+
     }
 }

@@ -10,7 +10,7 @@ namespace TMFileParser.Models.tm7
     [XmlRoot("ThreatModel")]
     public class TM7ThreatModel
     {
-        [XmlElement("DrawingSurfaceModel")]
+        [XmlElement("DrawingSurfaceList")]
         public TM7DrawingSurfaceList drawingSurfaceList { get; set; }
 
         [XmlElement("MetaInformation")]

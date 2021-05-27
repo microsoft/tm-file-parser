@@ -28,7 +28,9 @@ namespace TMFileParserApp
             {
                 //Ask user for file path
                 Console.Write("Give TM7/TB7 file path, and then press Enter: ");
-                var filePath = Console.ReadLine();
+                var filePath = @"C:\Users\chmg\Desktop\tmout\1.tm7";
+                //var filePath = @"C:\Users\chmg\Desktop\tmout\MedicalDeviceTemplate.tb7";
+                //var filePath = Console.ReadLine();
 
                 //File path checks
                 if (Path.GetExtension(filePath) != ".tm7" && Path.GetExtension(filePath) != ".tb7")
