@@ -45,7 +45,7 @@ namespace TMFileConverter
 
                 var doneWithFile = false;
                 while (!doneWithFile)
-                {
+                {            
                     Console.WriteLine();
                     Console.WriteLine("1 - Save as Json");
                     Console.WriteLine("N/n - Parse another tm7/tb7 file.");
@@ -67,13 +67,12 @@ namespace TMFileConverter
                             try
                             {
                                 File.WriteAllText(outputFilePath, outputJson);
-                            }
-                            catch (Exception e)
+                            }catch(Exception e)
                             {
                                 Console.WriteLine("Invalid File Path");
                                 break;
                             }
-
+                            
                             Console.WriteLine();
                             Console.Write("JSON file saved. Path : " + outputFilePath);
                             break;
@@ -87,12 +86,13 @@ namespace TMFileConverter
                             break;
 
                     }
-                }
+                }         
 
                 //Spacing
                 Console.WriteLine();
-                Console.WriteLine();
-            }
+                Console.WriteLine();               
+            }   
         }
     }
 }
+ 
