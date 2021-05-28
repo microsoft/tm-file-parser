@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.Json;
 using TMFileParser;
 
-namespace TMFileParserApp
+namespace TMFileConverter
 {
     class Program
     {
