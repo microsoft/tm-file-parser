@@ -29,6 +29,12 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
+- task: BinSkim@4
+  inputs:
+    InputType: 'CommandLine'
+    arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --verbose'
+  continueOnError: true
+
 - task: Semmle@1
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
@@ -40,10 +46,41 @@ steps:
     addProjectDirToScanningExclusionList: true
   continueOnError: true
 
-- task: BinSkim@4
+- task: SdtReport@2
   inputs:
-    InputType: 'CommandLine'
-    arguments: 'analyze $(Build.ArtifactStagingDirectory)\* --recurse --verbose'
+    GdnExportHtmlFile: true
+    GdnExportAllTools: false
+    GdnExportGdnToolBinSkim: true
+    GdnExportGdnToolSemmle: true
+  continueOnError: true
+
+- task: PublishSecurityAnalysisLogs@3
+  inputs:
+    ArtifactName: 'CodeAnalysisLogs'
+    ArtifactType: 'Container'
+    AllTools: false
+    AntiMalware: false
+    APIScan: false
+    Armory: false
+    Bandit: false
+    BinSkim: true
+    CodesignValidation: false
+    CredScan: false
+    CSRF: false
+    ESLint: false
+    Flawfinder: false
+    FortifySCA: false
+    FxCop: false
+    ModernCop: false
+    MSRD: false
+    PoliCheck: false
+    RoslynAnalyzers: false
+    SDLNativeRules: false
+    Semmle: true
+    SpotBugs: false
+    TSLint: false
+    WebScout: false
+    ToolLogsNotFoundAction: 'Standard'
   continueOnError: true
 
 - task: PublishBuildArtifacts@1
