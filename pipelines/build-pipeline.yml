@@ -44,7 +44,7 @@ steps:
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'csharp'
-    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.csproj;dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.csproj'
+    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.sln'
     querySuite: 'Recommended'
     timeout: '1800'
     ram: '16384'
