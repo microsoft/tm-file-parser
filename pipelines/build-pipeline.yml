@@ -44,12 +44,23 @@ steps:
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'csharp'
-    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.sln'
+    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
     querySuite: 'Recommended'
     timeout: '1800'
     ram: '16384'
     addProjectDirToScanningExclusionList: true
   continueOnError: true
+
+- task: BinSkim@4
+  inputs:
+    InputType: 'Basic'
+    Function: 'analyze'
+    TargetPattern: 'guardianGlob'
+    AnalyzeTargetGlob: '$(Build.ArtifactStagingDirectory)\**.dll;$(Build.ArtifactStagingDirectory)\**.exe;'
+    AnalyzeVerbose: true
+  continueOnError: true
+
+
 
 - task: PublishBuildArtifacts@1
   inputs:
