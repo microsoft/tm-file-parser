@@ -33,34 +33,18 @@ steps:
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
     language: 'csharp'
-    buildCommandsString: '"%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\VsMSBuildCmd.bat" && msbuild $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.csproj /t:Clean;"%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\VsMSBuildCmd.bat" && msbuild $(Build.SourcesDirectory)\TMFileParser\TMFileParser\TMFileParser.csproj'
-    querySuite: 'Recommended'
-    timeout: '1800'
-    ram: '16384'
-    addProjectDirToScanningExclusionList: true
-  continueOnError: true
-
-- task: Semmle@1
-  inputs:
-    sourceCodeDirectory: '$(Build.SourcesDirectory)'
-    language: 'csharp'
     buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
     querySuite: 'Recommended'
     timeout: '1800'
-    ram: '16384'
+    ram: '6384'
     addProjectDirToScanningExclusionList: true
   continueOnError: true
 
 - task: BinSkim@4
   inputs:
-    InputType: 'Basic'
-    Function: 'analyze'
-    TargetPattern: 'guardianGlob'
-    AnalyzeTargetGlob: '$(Build.ArtifactStagingDirectory)\**.dll;$(Build.ArtifactStagingDirectory)\**.exe;'
-    AnalyzeVerbose: true
+    InputType: 'CommandLine'
+    arguments: 'analyze $(Build.ArtifactStagingDirectory)\* --recurse --verbose'
   continueOnError: true
-
-
 
 - task: PublishBuildArtifacts@1
   inputs:
