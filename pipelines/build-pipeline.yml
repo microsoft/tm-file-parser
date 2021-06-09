@@ -29,6 +29,16 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
+- task: Semmle@1
+  inputs:
+    sourceCodeDirectory: '$(Build.SourcesDirectory)'
+    language: 'csharp'
+    buildCommandsString: '"%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\VsMSBuildCmd.bat" && msbuild $(Build.SourcesDirectory)/TMFileParser/TMFileParser/TMFileParser.csproj /t:Clean;"%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\VsMSBuildCmd.bat" && msbuild $(Build.SourcesDirectory)/TMFileParser/TMFileParser/TMFileParser.csproj'
+    querySuite: 'Recommended'
+    timeout: '1800'
+    ram: '16384'
+    addProjectDirToScanningExclusionList: true
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
