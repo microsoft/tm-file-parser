@@ -7,7 +7,7 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tb7
 {
     [ExcludeFromCodeCoverage]
-    [XmlRoot("KnowledgeBase")]
+    [XmlRoot("KnowledgeBase", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase")]
     public class TB7KnowledgeBase
     {
         [XmlElement("Manifest")]

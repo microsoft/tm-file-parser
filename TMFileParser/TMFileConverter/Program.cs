@@ -51,8 +51,8 @@ namespace TMFileConverter
                     Console.WriteLine("N/n - Parse another tm7/tb7 file.");
                     Console.WriteLine("E/e - Exit");
                     Console.Write("Select one option from above:");
-                    var parser = new TMParser();
-                    var result = parser.ReadV7(filePath);
+                    var parser = new Parser(filePath);
+                    var result = parser.ReadFile();
                     var outputOption = Console.ReadKey().KeyChar;
                     Console.WriteLine();
                     Console.WriteLine();
