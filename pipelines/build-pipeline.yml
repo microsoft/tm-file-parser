@@ -29,6 +29,31 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+    zipAfterPublish: false
+
+
 - task: BinSkim@4
   inputs:
     InputType: 'CommandLine'
