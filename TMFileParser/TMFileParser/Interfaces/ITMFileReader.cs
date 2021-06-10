@@ -6,6 +6,6 @@ namespace TMFileParser.Interfaces
 {
     public interface ITMFileReader
     {
-        public object ReadTMFile(string filePath);
+        public object ReadTMFile();
     }
 }

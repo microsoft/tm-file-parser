@@ -15,13 +15,13 @@ namespace TMFileParser
         private readonly IFileSystem _fileSystem;
         protected string _fileContent;
         [ExcludeFromCodeCoverage]
-        public TB7FileReader(string filePath) : this(new FileSystem(), filePath) { }
-        public TB7FileReader(FileSystem fileSystem, string filePath)
+        public TB7FileReader(FileInfo inputFile) : this(new FileSystem(), inputFile) { }
+        public TB7FileReader(FileSystem fileSystem, FileInfo inputFile)
         {
             _fileSystem = fileSystem;
-            _fileContent = _fileSystem.File.ReadAllText(filePath);
+            _fileContent = _fileSystem.File.ReadAllText(inputFile.FullName);
         }
-        public object ReadTMFile(string filePath)
+        public object ReadTMFile()
         {
             StringReader stringReader = new StringReader(_fileContent);
             XmlSerializer serializer = new XmlSerializer(typeof(TB7KnowledgeBase), new XmlRootAttribute("KnowledgeBase"));

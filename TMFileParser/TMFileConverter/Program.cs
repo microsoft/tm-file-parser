@@ -1,4 +1,6 @@
 ﻿using System;
+using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.IO;
 using System.Text.Json;
 using TMFileParser;
@@ -7,92 +9,100 @@ namespace TMFileConverter
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            bool endParser = false;
-            //Display title - TMT File Converter 
-            Console.WriteLine(" ________________________________________");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|                  TMT                   |");
-            Console.WriteLine("|              File Converter            |");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|                                        |");
-            Console.WriteLine("|________________________________________|");
-            Console.WriteLine();
-            Console.WriteLine();
+            var rootCommand = new RootCommand();
 
-            while (!endParser)
+            var helpCommand = new Command("help", "Instructions for using the parser.");
+            helpCommand.Handler = CommandHandler.Create(() =>
             {
-                //Ask user for file path
-                Console.Write("Give TM7/TB7 file path, and then press Enter: ");
-                var filePath = Console.ReadLine();
+                Console.WriteLine(" ________________________________________");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|                  TMT                   |");
+                Console.WriteLine("|              File Converter            |");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|                                        |");
+                Console.WriteLine("|________________________________________|");
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine("This tool can be used to parse tm7 and tb7 file.");
+                Console.WriteLine();
+                Console.WriteLine("Options - ");
+                Console.WriteLine("json -  Converts the file to json file and saves in given output path.");
+                Console.WriteLine();
+                Console.WriteLine("Instructions - ");
+                Console.WriteLine("tmfileparser --input-path [Path of tm7 or tb7 file] --convert [Convert operation] --output-path [Path to store the output]");
+            });
+            rootCommand.AddCommand(helpCommand);
 
-                //File path checks
-                if (Path.GetExtension(filePath) != ".tm7" && Path.GetExtension(filePath) != ".tb7")
-                {
-                    Console.WriteLine();
-                    Console.WriteLine("InvalidTM7/TB7 file path.");
-                    Console.WriteLine("Click E/e - Exit or nny other key to Retry:");
-                    var retryReply = Console.ReadKey().KeyChar;
-                    if (retryReply == 'E' || retryReply == 'e') endParser = true;
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    continue;
-                }
+            var inputPathOption = new Option<FileInfo>(
+                    "--input-path",
+                    "Input tm7 file path.");
+            var convertOption = new Option<string>(
+                    "--convert",
+                    "Output file format to convert.");
+            var outputPathOption = new Option<FileInfo>(
+                    "--output-path",
+                    "Path to store output.");
 
-                var doneWithFile = false;
-                while (!doneWithFile)
+            rootCommand.AddOption(inputPathOption);
+            rootCommand.AddOption(convertOption);
+            rootCommand.AddOption(outputPathOption);
+            rootCommand.Handler = CommandHandler.Create<FileInfo, string, FileInfo>((inputpath, convert, outputpath) => {
                 {
-                    Console.WriteLine();
-                    Console.WriteLine("1 - Save as Json");
-                    Console.WriteLine("N/n - Parse another tm7/tb7 file.");
-                    Console.WriteLine("E/e - Exit");
-                    Console.Write("Select one option from above:");
-                    var parser = new Parser(filePath);
-                    var result = parser.ReadFile();
-                    var outputOption = Console.ReadKey().KeyChar;
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    outputOption = char.ToLower(outputOption);
-                    switch (outputOption)
+                    if (inputpath == null || convert == null)
                     {
-                        case '1':
+                        throw new ArgumentNullException("Missing inputs. --input-path and --convert are required.");
+                    }
+                    if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
+                    {
+                        throw new ArgumentException("Invalid --input-path.");
+                    }
+                    var parser = new Parser(inputpath);
+                    var result = parser.ReadFile();
+                    Console.WriteLine(" ________________________________________");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|                  TMT                   |");
+                    Console.WriteLine("|              File Converter            |");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|                                        |");
+                    Console.WriteLine("|________________________________________|");
+                    Console.WriteLine();
+                    Console.WriteLine();
+                    switch (convert)
+                    {
+                        case "json":
+                            if (outputpath == null)
+                            {
+                                throw new ArgumentNullException("Missing inputs. --output-path are required to convert to json.");
+                            }
                             string outputJson = JsonSerializer.Serialize(result);
-                            Console.Write("Give path to save the json file: ");
-                            var outputDirectory = Console.ReadLine();
-                            var outputFilePath = Path.Combine(outputDirectory, Path.GetFileNameWithoutExtension(filePath) + ".json");
+                            var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + ".json");
                             try
                             {
                                 File.WriteAllText(outputFilePath, outputJson);
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine("Invalid File Path");
-                                break;
+                                throw new Exception("Error occured while converting to json.");
                             }
 
                             Console.WriteLine();
                             Console.Write("JSON file saved. Path : " + outputFilePath);
                             break;
-                        case 'n':
-                            doneWithFile = true;
-                            break;
-                        case 'e':
-                            endParser = true;
-                            break;
                         default:
-                            break;
-
+                            throw new ArgumentException("Invalid --convert.");
                     }
                 }
-
-                //Spacing
-                Console.WriteLine();
-                Console.WriteLine();
-            }
+            });
+            rootCommand.Description = "Command line tool to parser tm7 and tb7 files.";
+            return rootCommand.InvokeAsync(args).Result;
         }
     }
 }

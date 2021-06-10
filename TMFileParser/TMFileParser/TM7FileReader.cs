@@ -15,26 +15,16 @@ namespace TMFileParser
         private readonly IFileSystem _fileSystem;
         protected string _fileContent;
         [ExcludeFromCodeCoverage]
-        public TM7FileReader(string filePath) : this(new FileSystem(), filePath) { }
-        public TM7FileReader(IFileSystem fileSystem, string filePath) {
+        public TM7FileReader(FileInfo inputFile) : this(new FileSystem(), inputFile) { }
+        public TM7FileReader(IFileSystem fileSystem, FileInfo inputFile) {
             _fileSystem = fileSystem;
-            _fileContent = _fileSystem.File.ReadAllText(filePath);
+            _fileContent = _fileSystem.File.ReadAllText(inputFile.FullName);
         }
-        public object ReadTMFile(string filePath)
+        public object ReadTMFile()
         {
-            var processedFileContent = PreProcess(_fileContent);
-            StringReader stringReader = new StringReader(processedFileContent);
+            StringReader stringReader = new StringReader(_fileContent);
             XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), "http://schemas.datacontract.org/2004/07/ThreatModeling.Model");
             return (TM7ThreatModel)serializer.Deserialize(stringReader);
-        }
-
-        private string PreProcess(string fileContent)
-        {
-            //fileContent = fileContent.Replace("a:", "");
-            //fileContent = fileContent.Replace("b:", "");
-            //fileContent = fileContent.Replace("i:", "");
-            //fileContent = fileContent.Replace("z:", "");
-            return fileContent;
         }
     }
 }

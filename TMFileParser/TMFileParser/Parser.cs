@@ -8,26 +8,25 @@ namespace TMFileParser
 {
     public class Parser
     {
-        private string _filePath;
+        private FileInfo _inputFile;
         private string _fileExtension;
         private ITMFileReader _reader;
 
-        public Parser(string filePath)
+        public Parser(FileInfo inputFile)
         {
-            this._filePath = filePath;
-            SetFileExtension();
+            this._inputFile = inputFile;
             SelectReader();
         }
 
         private void SelectReader()
         {
-            switch (this._fileExtension)
+            switch (_inputFile.Extension)
             {
                 case ".tm7":
-                    _reader = _reader??new TM7FileReader(this._filePath);
+                    _reader = _reader ?? new TM7FileReader(this._inputFile);
                     break;
                 case ".tb7":
-                    _reader = new TB7FileReader(this._filePath);
+                    _reader = _reader ?? new TB7FileReader(this._inputFile);
                     break;
                 default:
                     throw new NotSupportedException("Invalid File Format/Path");
@@ -36,13 +35,8 @@ namespace TMFileParser
 
         public object ReadFile()
         {
-            return _reader.ReadTMFile(_filePath);
+            return _reader.ReadTMFile();
 
-        }
-
-        private void SetFileExtension()
-        {
-            _fileExtension = Path.GetExtension(_filePath);
         }
     }
 }
