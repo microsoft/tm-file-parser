@@ -57,7 +57,7 @@ steps:
 - task: BinSkim@4
   inputs:
     InputType: 'CommandLine'
-    arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --verbose'
+    arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
   continueOnError: true
 
 - task: Semmle@1
