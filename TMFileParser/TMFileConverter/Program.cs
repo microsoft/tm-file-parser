@@ -3,13 +3,14 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Text.Json;
+using System.Threading.Tasks;
 using TMFileParser;
 
 namespace TMFileConverter
 {
     class Program
     {
-        static int Main(string[] args)
+        static async Task Main(string[] args)
         {
             var rootCommand = new RootCommand();
 
@@ -41,68 +42,68 @@ namespace TMFileConverter
             var inputPathOption = new Option<FileInfo>(
                     "--input-path",
                     "Input tm7 file path.");
-            var convertOption = new Option<string>(
-                    "--convert",
+            inputPathOption.AddAlias("-i");
+
+            var formatOption = new Option<string>(
+                    "--save-format",
                     "Output file format to convert.");
+            formatOption.AddAlias("-s");
+
+            var actionOption = new Option<string[]>(
+                    "--action",
+                    "Action to be performed");
+            actionOption.AddAlias("-a");
+
             var outputPathOption = new Option<FileInfo>(
                     "--output-path",
                     "Path to store output.");
+            outputPathOption.AddAlias("-o");
 
             rootCommand.AddOption(inputPathOption);
-            rootCommand.AddOption(convertOption);
+            rootCommand.AddOption(formatOption);
             rootCommand.AddOption(outputPathOption);
-            rootCommand.Handler = CommandHandler.Create<FileInfo, string, FileInfo>((inputpath, convert, outputpath) => {
-                {
-                    if (inputpath == null || convert == null)
-                    {
-                        throw new ArgumentNullException("Missing inputs. --input-path and --convert are required.");
-                    }
-                    if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
-                    {
-                        throw new ArgumentException("Invalid --input-path.");
-                    }
-                    var parser = new Parser(inputpath);
-                    var result = parser.ReadFile();
-                    Console.WriteLine(" ________________________________________");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|                  TMT                   |");
-                    Console.WriteLine("|              File Converter            |");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|                                        |");
-                    Console.WriteLine("|________________________________________|");
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    switch (convert)
-                    {
-                        case "json":
-                            if (outputpath == null)
-                            {
-                                throw new ArgumentNullException("Missing inputs. --output-path are required to convert to json.");
-                            }
-                            string outputJson = JsonSerializer.Serialize(result);
-                            var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + ".json");
-                            try
-                            {
-                                File.WriteAllText(outputFilePath, outputJson);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new Exception("Error occured while converting to json.");
-                            }
-
-                            Console.WriteLine();
-                            Console.Write("JSON file saved. Path : " + outputFilePath);
-                            break;
-                        default:
-                            throw new ArgumentException("Invalid --convert.");
-                    }
-                }
-            });
+            rootCommand.AddOption(actionOption);
+            rootCommand.Handler = CommandHandler.Create<FileInfo, string, string[], FileInfo>(RunCommand);
             rootCommand.Description = "Command line tool to parser tm7 and tb7 files.";
-            return rootCommand.InvokeAsync(args).Result;
+            await rootCommand.InvokeAsync(args);
+        }
+
+        public static void RunCommand(FileInfo inputpath, string saveformat, string[] action, FileInfo outputpath)
+        {
+            if (inputpath == null || saveformat == null)
+            {
+                throw new ArgumentNullException("Missing inputs. --input-path and --convert are required.");
+            }
+            if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
+            {
+                throw new ArgumentException("Invalid --input-path.");
+            }
+            var parser = new Parser(inputpath);
+            var result = parser.ReadFile();
+            switch (saveformat)
+            {
+                case "json":
+                    if (outputpath == null)
+                    {
+                        throw new ArgumentNullException("Missing inputs. --output-path are required to convert to json.");
+                    }
+                    string outputJson = JsonSerializer.Serialize(result);
+                    var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + ".json");
+                    try
+                    {
+                        File.WriteAllText(outputFilePath, outputJson);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Error occured while converting to json.");
+                    }
+
+                    Console.WriteLine();
+                    Console.Write("JSON file saved. Path : " + outputFilePath);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid --convert.");
+            }
         }
     }
 }
