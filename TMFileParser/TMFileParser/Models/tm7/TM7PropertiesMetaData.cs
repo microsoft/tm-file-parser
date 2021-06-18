@@ -5,10 +5,9 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-
-    public class TM7Properties
+    public class TM7PropertiesMetaData
     {
-        [XmlElement("anyType")]
-        public List<TM7AnyType> anyType { get; set; }
+        [XmlElement("ThreatMetaDatum")]
+        public List<TM7ThreatMetaDatum> threatMetaDatum { get; set; }
     }
 }

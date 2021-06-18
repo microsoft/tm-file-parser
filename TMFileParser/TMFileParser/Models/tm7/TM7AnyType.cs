@@ -8,9 +8,9 @@ namespace TMFileParser.Models.tm7
     public class TM7AnyType
     {
         [XmlElement("DisplayName")]
-        public string displayName { get; set; }
+        public string DisplayName { get; set; }
         [XmlElement("Name")]
-        public string name { get; set; }
+        public string Name { get; set; }
         [XmlAttribute("type")]
         public string type { get; set; }
     }

@@ -22,9 +22,14 @@ namespace TMFileParser
         }
         public object ReadTMFile()
         {
-            StringReader stringReader = new StringReader(_fileContent);
+            StringReader stringReader = new StringReader(this.PreProcessData(_fileContent));
             XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), "http://schemas.datacontract.org/2004/07/ThreatModeling.Model");
             return (TM7ThreatModel)serializer.Deserialize(stringReader);
+        }
+
+        private string PreProcessData(string fileContent)
+        {
+            return fileContent.Replace("a:", "").Replace("b:", "").Replace("i:","").Replace("z:","");
         }
     }
 }

@@ -5,10 +5,9 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-
-    public class TM7Properties
+    public class TM7Values
     {
-        [XmlElement("anyType")]
-        public List<TM7AnyType> anyType { get; set; }
+        [XmlElement("Value")]
+        public List<string> valueList { get; set; }
     }
 }

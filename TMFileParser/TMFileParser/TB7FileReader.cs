@@ -16,7 +16,7 @@ namespace TMFileParser
         protected string _fileContent;
         [ExcludeFromCodeCoverage]
         public TB7FileReader(FileInfo inputFile) : this(new FileSystem(), inputFile) { }
-        public TB7FileReader(FileSystem fileSystem, FileInfo inputFile)
+        public TB7FileReader(IFileSystem fileSystem, FileInfo inputFile)
         {
             _fileSystem = fileSystem;
             _fileContent = _fileSystem.File.ReadAllText(inputFile.FullName);

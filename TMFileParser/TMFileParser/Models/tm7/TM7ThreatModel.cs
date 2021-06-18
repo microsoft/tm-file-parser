@@ -29,7 +29,7 @@ namespace TMFileParser.Models.tm7
         public TM7Validations validations { get; set; }
 
         [XmlElement("KnowledgeBase")]
-        public TB7KnowledgeBase knowledgeBase { get; set; }
+        public TM7KnowledgeBase knowledgeBase { get; set; }
 
         [XmlElement("Profile")]
         public TM7Profile profile { get; set; }
