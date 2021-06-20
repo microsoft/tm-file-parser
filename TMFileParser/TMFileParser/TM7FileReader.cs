@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Abstractions;
 using System.Text;
 using System.Xml.Serialization;
 using TMFileParser.Interfaces;
@@ -13,14 +12,12 @@ namespace TMFileParser
 {
     public class TM7FileReader : ITMFileReader
     {
-        private readonly IFileSystem _fileSystem;
         protected string _fileContent;
         private TM7ThreatModel _tmData;
         [ExcludeFromCodeCoverage]
         public TM7FileReader(FileInfo inputFile)
         {
-            _fileSystem = new FileSystem();
-            _fileContent = _fileSystem.File.ReadAllText(inputFile.FullName);
+            _fileContent = File.ReadAllText(inputFile.FullName);
             this.ReadTMFile();
         }
 

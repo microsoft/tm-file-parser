@@ -1,12 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
-using System.Linq;
 using TMFileParser;
-using TMFileParser.Models;
-using TMFileParser.Models.tm7;
 using TMFileParser.Models.tb7;
-using System.IO.Abstractions.TestingHelpers;
 
 namespace TMFileParserTest
 {
