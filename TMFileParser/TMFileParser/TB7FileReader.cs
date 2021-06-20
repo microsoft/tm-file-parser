@@ -14,18 +14,31 @@ namespace TMFileParser
     {
         private readonly IFileSystem _fileSystem;
         protected string _fileContent;
+        private TB7KnowledgeBase _tmData;
         [ExcludeFromCodeCoverage]
-        public TB7FileReader(FileInfo inputFile) : this(new FileSystem(), inputFile) { }
-        public TB7FileReader(IFileSystem fileSystem, FileInfo inputFile)
+        public TB7FileReader(FileInfo inputFile)
         {
-            _fileSystem = fileSystem;
+            _fileSystem = new FileSystem();
             _fileContent = _fileSystem.File.ReadAllText(inputFile.FullName);
+            this.ReadTMFile();
         }
-        public object ReadTMFile()
+
+        private void ReadTMFile()
         {
             StringReader stringReader = new StringReader(_fileContent);
             XmlSerializer serializer = new XmlSerializer(typeof(TB7KnowledgeBase), new XmlRootAttribute("KnowledgeBase"));
-            return (TB7KnowledgeBase)serializer.Deserialize(stringReader);
+            this._tmData = (TB7KnowledgeBase)serializer.Deserialize(stringReader);
+        }
+
+        public object GetData(string category)
+        {
+            switch (category)
+            {
+                case "all":
+                    return this._tmData;
+                default:
+                    throw new InvalidDataException("Invalid category provided.");
+            }
         }
 
     }

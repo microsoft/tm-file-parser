@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using TMFileParser;
 
 namespace TMFileConverter
 {
+    [ExcludeFromCodeCoverage]
     class Program
     {
         static async Task Main(string[] args)
@@ -50,9 +52,9 @@ namespace TMFileConverter
             formatOption.AddAlias("-s");
 
             var actionOption = new Option<string[]>(
-                    "--action",
-                    "Action to be performed");
-            actionOption.AddAlias("-a");
+                    "--get",
+                    "Data to be retieved.");
+            actionOption.AddAlias("-g");
 
             var outputPathOption = new Option<FileInfo>(
                     "--output-path",
@@ -68,42 +70,42 @@ namespace TMFileConverter
             await rootCommand.InvokeAsync(args);
         }
 
-        public static void RunCommand(FileInfo inputpath, string saveformat, string[] action, FileInfo outputpath)
+        public static void RunCommand(FileInfo inputpath, string saveformat, string[] get, FileInfo outputpath)
         {
-            if (inputpath == null || saveformat == null)
+            if (inputpath == null || saveformat == null || get == null)
             {
-                throw new ArgumentNullException("Missing inputs. --input-path and --convert are required.");
+                throw new ArgumentNullException("Missing inputs. -i/--input-path, -g/--get, -o/--output-path and -s/--save-format are required.");
             }
             if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
             {
                 throw new ArgumentException("Invalid --input-path.");
             }
             var parser = new Parser(inputpath);
-            var result = parser.ReadFile();
-            switch (saveformat)
+            foreach(string category in get)
             {
-                case "json":
-                    if (outputpath == null)
-                    {
-                        throw new ArgumentNullException("Missing inputs. --output-path are required to convert to json.");
-                    }
-                    string outputJson = JsonSerializer.Serialize(result);
-                    var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + ".json");
-                    try
-                    {
-                        File.WriteAllText(outputFilePath, outputJson);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Error occured while converting to json.");
-                    }
+                var result = parser.GetData(category);
+                switch (saveformat)
+                {
+                    case "json":
+                        string outputJson = JsonSerializer.Serialize(result);
+                        var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + "-" + category + ".json");
+                        try
+                        {
+                            File.WriteAllText(outputFilePath, outputJson);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new Exception("Error occured while converting.");
+                        }
 
-                    Console.WriteLine();
-                    Console.Write("JSON file saved. Path : " + outputFilePath);
-                    break;
-                default:
-                    throw new ArgumentException("Invalid --convert.");
+                        Console.WriteLine();
+                        Console.Write("File saved. Path : " + outputFilePath);
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid -s/--save-format.");
+                }
             }
         }
+                  
     }
 }

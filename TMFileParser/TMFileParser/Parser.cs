@@ -9,8 +9,7 @@ namespace TMFileParser
     public class Parser
     {
         private FileInfo _inputFile;
-        private string _fileExtension;
-        private ITMFileReader _reader;
+        public ITMFileReader _reader;
 
         public Parser(FileInfo inputFile)
         {
@@ -33,10 +32,10 @@ namespace TMFileParser
             }
         }
 
-        public object ReadFile()
+        public object GetData(string category)
         {
-            return _reader.ReadTMFile();
-
+            category = category.ToLower();
+            return _reader.GetData(category);
         }
     }
 }
