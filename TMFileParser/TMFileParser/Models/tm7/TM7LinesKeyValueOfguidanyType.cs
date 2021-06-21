@@ -8,7 +8,7 @@ namespace TMFileParser.Models.tm7
     public class TM7LinesKeyValueOfguidanyType
     {
         [XmlElement("Key")]
-        public string linesKey { get; set; }
+        public string key { get; set; }
         [XmlElement("Value")]
         public TM7LinesValue value { get; set; }
     }

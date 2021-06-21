@@ -9,8 +9,6 @@ namespace TMFileParser.Models.tb7
     [ExcludeFromCodeCoverage]
     public class TB7Attribute
     {
-        [XmlElement("IsExtension")]
-        public bool isExtension { get; set; }
         [XmlElement("IsInherited")]
         public bool isInherited { get; set; }
         [XmlElement("DisplayName")]

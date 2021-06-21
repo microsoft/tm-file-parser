@@ -5,7 +5,6 @@ using TMFileParser.Models.tb7;
 namespace TMFileParser.Models.tm7
 {
 
-    /// <remarks/>
     [ExcludeFromCodeCoverage]
     [XmlRoot("ThreatModel")]
     public class TM7ThreatModel
@@ -17,7 +16,7 @@ namespace TMFileParser.Models.tm7
         public TM7MetaInformation metaInformation { get; set; }
 
         [XmlElement("Notes")]
-        public string notes { get; set; }
+        public TM7Notes notes { get; set; }
 
         [XmlElement("ThreatInstances")]
         public TM7ThreatInstances threatInstances { get; set; }

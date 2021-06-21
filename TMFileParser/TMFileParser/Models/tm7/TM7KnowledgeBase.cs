@@ -10,6 +10,8 @@ namespace TMFileParser.Models.tm7
     [XmlRoot("KnowledgeBase", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.KnowledgeBase")]
     public class TM7KnowledgeBase
     {
+        [XmlAttribute("Id")]
+        public string id { get; set; }
         [XmlElement("Manifest")]
         public TM7Manifest manifest { get; set; }
 

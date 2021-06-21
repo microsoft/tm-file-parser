@@ -37,5 +37,7 @@ namespace TMFileParser.Models.tm7
         public decimal targetY { get; set; }
         [XmlAttribute("type")]
         public string type { get; set; }
+        [XmlAttribute("id")]
+        public string id { get; set; }
     }
 }

@@ -12,12 +12,12 @@ namespace TMFileParser.Models.tb7
     {
         [XmlElement("Manifest")]
         public TB7Manifest manifest { get; set; }
-
         [XmlElement("ThreatMetaData")]
         public TB7ThreatMetaData threatMetaData { get; set; }
-
         [XmlElement("GenericElements")]
         public TB7GenericElements genericElements { get; set; }
+        [XmlElement("StandardElements")]
+        public TB7StandardElements standardElements { get; set; }
         [XmlElement("ThreatCategories")]
         public TB7ThreatCategories threatCategories { get; set; }
         [XmlElement("ThreatTypes")]

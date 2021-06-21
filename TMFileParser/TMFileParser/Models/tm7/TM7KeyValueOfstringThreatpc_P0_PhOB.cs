@@ -5,11 +5,11 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-    public class TM7BordersKeyValueOfguidanyType
+    public class TM7KeyValueOfstringThreatpc_P0_PhOB
     {
         [XmlElement("Key")]
         public string key { get; set; }
         [XmlElement("Value")]
-        public TM7BordersValue value { get; set; }
+        public TM7ThreatInstancesValue value { get; set; }
     }
 }

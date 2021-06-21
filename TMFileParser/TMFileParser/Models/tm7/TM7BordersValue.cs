@@ -21,11 +21,15 @@ namespace TMFileParser.Models.tm7
         public decimal left { get; set; }
         [XmlElement("StrokeThickness", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts")]
         public decimal strokeThickness { get; set; }
+        [XmlElement("StrokeDashArray", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts")]
+        public string strokeDashArray { get; set; }
         [XmlElement("Top", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts")]
         public decimal top { get; set; }
         [XmlElement("Width", Namespace = "http://schemas.datacontract.org/2004/07/ThreatModeling.Model.Abstracts")]
         public decimal width { get; set; }
         [XmlAttribute("type")]
         public string type { get; set; }
+        [XmlAttribute("Id")]
+        public string id { get; set; }
     }
 }

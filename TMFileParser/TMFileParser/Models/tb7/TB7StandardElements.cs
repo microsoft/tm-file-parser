@@ -7,9 +7,9 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tb7
 {
     [ExcludeFromCodeCoverage]
-    public class TB7StencilConstraints
+    public class TB7StandardElements
     {
-        [XmlElement("StencilConstraint")]
-        public List<TB7StencilConstraint> stencilConstraint { get; set; }
+        [XmlElement("ElementType")]
+        public List<TB7ElementType> elementType { get; set; }
     }
 }
