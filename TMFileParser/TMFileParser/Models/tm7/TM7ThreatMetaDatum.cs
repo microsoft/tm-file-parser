@@ -14,11 +14,9 @@ namespace TMFileParser.Models.tm7
         public bool hideFromUI { get; set; }
         [XmlElement("Values")]
         public TM7Values values { get; set; }
-        [XmlElement("Description")]
-        public string description { get; set; }
         [XmlElement("Id")]
         public string id { get; set; }
         [XmlElement("AttributeType")]
-        public int attributeType { get; set; }
+        public decimal attributeType { get; set; }
     }
 }

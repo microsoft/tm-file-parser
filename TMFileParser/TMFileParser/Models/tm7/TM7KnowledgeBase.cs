@@ -20,6 +20,8 @@ namespace TMFileParser.Models.tm7
 
         [XmlElement("GenericElements")]
         public TM7GenericElements genericElements { get; set; }
+        [XmlElement("StandardElements")]
+        public TM7StandardElements standardElements { get; set; }
         [XmlElement("ThreatCategories")]
         public TM7ThreatCategories threatCategories { get; set; }
         [XmlElement("ThreatTypes")]

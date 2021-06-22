@@ -9,6 +9,8 @@ namespace TMFileParser.Models.tm7
     [ExcludeFromCodeCoverage]
     public class TM7ThreatType
     {
+        [XmlElement("IsExtension")]
+        public bool isExtension { get; set; }
         [XmlElement("GenerationFilters")]
         public TM7GenerationFilters generationFilters { get; set; }
         [XmlElement("Id")]
@@ -17,7 +19,11 @@ namespace TMFileParser.Models.tm7
         public string shortTitle { get; set; }
         [XmlElement("Category")]
         public string category { get; set; }
+        [XmlElement("RelatedCategory")]
+        public string relatedCategory { get; set; }
         [XmlElement("Description")]
         public string description { get; set; }
+        [XmlElement("PropertiesMetaData")]
+        public TM7PropertiesMetaData propertiesMetaData { get; set; }
     }
 }

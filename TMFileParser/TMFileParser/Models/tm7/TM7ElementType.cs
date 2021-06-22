@@ -11,8 +11,12 @@ namespace TMFileParser.Models.tm7
     {
         [XmlElement("IsExtension")]
         public bool isExtension { get; set; }
+        [XmlElement("AvailableToBaseModels")]
+        public bool availableToBaseModels { get; set; }
         [XmlElement("Name")]
         public string name { get; set; }
+        [XmlElement("Behavior")]
+        public string behavior { get; set; }
         [XmlElement("Description")]
         public string description { get; set; }
         [XmlElement("Hidden")]
@@ -23,14 +27,15 @@ namespace TMFileParser.Models.tm7
         public string id { get; set; }
         [XmlElement("ImageLocation")]
         public string imageLocation { get; set; }
-        [XmlElement("ParentId")]
-        public string parentId { get; set; }
-        [XmlElement("ParentElement")]
-        public string parentElement { get; set; }
-        [XmlElement("Image")]
-        public string image { get; set; }
         [XmlElement("ImageSource")]
         public string imageSource { get; set; }
+        [XmlElement("ParentId")]
+        public string parentId { get; set; }
+        [XmlElement("Shape")]
+        public string shape { get; set; }
+        [XmlElement("ImageStream")]
+        public string imageStream { get; set; }
+        
         [XmlElement("Attributes")]
         public TM7Attributes attributes { get; set; }
         [XmlElement("StencilConstraints")]

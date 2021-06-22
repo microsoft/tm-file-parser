@@ -9,6 +9,8 @@ namespace TMFileParser.Models.tm7
     [ExcludeFromCodeCoverage]
     public class TM7ThreatCategory
     {
+        [XmlElement("IsExtension")]
+        public bool isExtension { get; set; }
         [XmlElement("Id")]
         public string id { get; set; }
         [XmlElement("Name")]
