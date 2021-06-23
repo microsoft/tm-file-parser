@@ -72,7 +72,7 @@ namespace TMFileConverter
 
         public static void RunCommand(FileInfo inputpath, string saveformat, string[] get, FileInfo outputpath)
         {
-            if (inputpath == null || saveformat == null || get == null)
+            if (inputpath == null || saveformat == null || get == null || outputpath == null)
             {
                 throw new ArgumentNullException("Missing inputs. -i/--input-path, -g/--get, -o/--output-path and -s/--save-format are required.");
             }
