@@ -65,46 +65,62 @@ namespace TMFileConverter
             rootCommand.AddOption(formatOption);
             rootCommand.AddOption(outputPathOption);
             rootCommand.AddOption(actionOption);
-            rootCommand.Handler = CommandHandler.Create<FileInfo, string, string[], FileInfo>(RunCommand);
             rootCommand.Description = "Command line tool to parser tm7 and tb7 files.";
+            rootCommand.Handler = CommandHandler.Create<FileInfo, string, string[], FileInfo>(RunCommand);
             await rootCommand.InvokeAsync(args);
+        }
+
+        public static void PrintError(string errorMessage)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(errorMessage);
+            Console.ResetColor();
         }
 
         public static void RunCommand(FileInfo inputpath, string saveformat, string[] get, FileInfo outputpath)
         {
-            if (inputpath == null || saveformat == null || get == null || outputpath == null)
+            try
             {
-                throw new ArgumentNullException("Missing inputs. -i/--input-path, -g/--get, -o/--output-path and -s/--save-format are required.");
-            }
-            if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
-            {
-                throw new ArgumentException("Invalid --input-path.");
-            }
-            var parser = new Parser(inputpath);
-            foreach(string category in get)
-            {
-                var result = parser.GetData(category);
-                switch (saveformat)
+                if (inputpath == null || saveformat == null || get == null || outputpath == null)
                 {
-                    case "json":
-                        string outputJson = JsonSerializer.Serialize(result);
-                        var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + "-" + category + ".json");
-                        try
-                        {
-                            File.WriteAllText(outputFilePath, outputJson);
-                        }
-                        catch (Exception e)
-                        {
-                            throw new Exception("Error occured while converting.");
-                        }
+                    throw new ArgumentNullException("Missing inputs. -i/--input-path, -g/--get, -o/--output-path and -s/--save-format are required.");
+                }
+                if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
+                {
+                    throw new ArgumentException("Invalid -i/--input-path.");
+                }
+                var parser = new Parser(inputpath);
+                foreach (string category in get)
+                {
+                    var result = parser.GetData(category);
+                    switch (saveformat)
+                    {
+                        case "json":
+                            string outputJson = JsonSerializer.Serialize(result);
+                            var outputFilePath = Path.Combine(outputpath.FullName, Path.GetFileNameWithoutExtension(inputpath.FullName) + "-" + category + ".json");
+                            try
+                            {
+                                File.WriteAllText(outputFilePath, outputJson);
+                            }
+                            catch (Exception e)
+                            {
+                                throw new Exception("Error occured while converting.");
+                            }
 
-                        Console.WriteLine();
-                        Console.Write("File saved. Path : " + outputFilePath);
-                        break;
-                    default:
-                        throw new ArgumentException("Invalid -s/--save-format.");
+                            Console.WriteLine();
+                            Console.WriteLine("File saved. Path : " + outputFilePath);
+                            break;
+                        default:
+                            throw new ArgumentException("Invalid -s/--save-format:" + saveformat);
+                    }
                 }
             }
+            catch (Exception e)
+            {
+                PrintError(e.Message);
+            }
+            
+            
         }
                   
     }

@@ -34,7 +34,7 @@ namespace TMFileParser
                 case "all":
                     return this._tmData;
                 default:
-                    throw new InvalidDataException("Invalid category provided.");
+                    throw new InvalidDataException("Invalid Get Operation:" + category );
             }
         }
 

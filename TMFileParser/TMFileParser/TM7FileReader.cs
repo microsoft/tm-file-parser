@@ -47,7 +47,7 @@ namespace TMFileParser
                     }
                     return boundaries;
                 default:
-                    throw new InvalidDataException("Invalid category provided.");
+                    throw new InvalidDataException("Invalid Get Operation:" + category);
             }
         }
     }
