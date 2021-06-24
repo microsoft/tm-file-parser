@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using TMFileParser.Interfaces;
 using TMFileParser.Models.tm7;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace TMFileParser
 {
@@ -30,7 +31,7 @@ namespace TMFileParser
 
         private string PreProcessData(string fileContent)
         {
-            return fileContent.Replace("a:", "").Replace("b:", "").Replace("i:", "").Replace("z:", "");
+            return Regex.Replace(fileContent, "[abiz]:", "");
         }
 
         public object GetData(string category)
