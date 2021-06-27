@@ -12,7 +12,7 @@ namespace TMFileParser.Models.tm7
         [XmlElement("IsExtension")]
         public bool isExtension { get; set; }
         [XmlElement("AvailableToBaseModels")]
-        public bool availableToBaseModels { get; set; }
+        public string availableToBaseModels { get; set; }
         [XmlElement("Name")]
         public string name { get; set; }
         [XmlElement("Behavior")]
@@ -35,7 +35,6 @@ namespace TMFileParser.Models.tm7
         public string shape { get; set; }
         [XmlElement("ImageStream")]
         public string imageStream { get; set; }
-        
         [XmlElement("Attributes")]
         public TM7Attributes attributes { get; set; }
         [XmlElement("StencilConstraints")]
