@@ -85,7 +85,8 @@ namespace TMFileConverter
                 {
                     throw new ArgumentNullException("Missing inputs. -i/--input-path, -g/--get, -o/--output-path and -s/--save-format are required.");
                 }
-                if (inputpath.Extension != ".tm7" && inputpath.Extension != ".tb7")
+                var extenison = inputpath.Extension.ToLower();
+                if (extenison != ".tm7" && extenison != ".tb7")
                 {
                     throw new ArgumentException("Invalid -i/--input-path.");
                 }
