@@ -19,7 +19,7 @@ namespace TMFileParser
 
         private void SelectReader()
         {
-            switch (_inputFile.Extension)
+            switch (_inputFile.Extension.ToLower())
             {
                 case ".tm7":
                     _reader = _reader ?? new TM7FileReader(this._inputFile);
