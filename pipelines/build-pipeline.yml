@@ -58,7 +58,6 @@ steps:
   inputs:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
-  continueOnError: true
 
 - task: Semmle@1
   inputs:
@@ -69,7 +68,6 @@ steps:
     timeout: '1800'
     ram: '6384'
     addProjectDirToScanningExclusionList: true
-  continueOnError: true
 
 - task: SdtReport@2
   inputs:
@@ -77,7 +75,6 @@ steps:
     GdnExportAllTools: false
     GdnExportGdnToolBinSkim: true
     GdnExportGdnToolSemmle: true
-  continueOnError: true
 
 - task: PublishSecurityAnalysisLogs@3
   inputs:
@@ -106,7 +103,6 @@ steps:
     TSLint: false
     WebScout: false
     ToolLogsNotFoundAction: 'Standard'
-  continueOnError: true
 
 - task: PublishBuildArtifacts@1
   inputs:
