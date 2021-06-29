@@ -1,0 +1,116 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: windows-2019
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'test'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+    zipAfterPublish: false
+
+
+- task: BinSkim@4
+  inputs:
+    InputType: 'CommandLine'
+    arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
+  continueOnError: true
+
+- task: Semmle@1
+  inputs:
+    sourceCodeDirectory: '$(Build.SourcesDirectory)'
+    language: 'csharp'
+    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
+    querySuite: 'Recommended'
+    timeout: '1800'
+    ram: '6384'
+    addProjectDirToScanningExclusionList: true
+  continueOnError: true
+
+- task: SdtReport@2
+  inputs:
+    GdnExportHtmlFile: true
+    GdnExportAllTools: false
+    GdnExportGdnToolBinSkim: true
+    GdnExportGdnToolSemmle: true
+  continueOnError: true
+
+- task: PublishSecurityAnalysisLogs@3
+  inputs:
+    ArtifactName: 'CodeAnalysisLogs'
+    ArtifactType: 'Container'
+    AllTools: false
+    AntiMalware: false
+    APIScan: false
+    Armory: false
+    Bandit: false
+    BinSkim: true
+    CodesignValidation: false
+    CredScan: false
+    CSRF: false
+    ESLint: false
+    Flawfinder: false
+    FortifySCA: false
+    FxCop: false
+    ModernCop: false
+    MSRD: false
+    PoliCheck: false
+    RoslynAnalyzers: false
+    SDLNativeRules: false
+    Semmle: true
+    SpotBugs: false
+    TSLint: false
+    WebScout: false
+    ToolLogsNotFoundAction: 'Standard'
+  continueOnError: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+
