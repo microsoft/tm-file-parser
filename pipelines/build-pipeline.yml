@@ -11,16 +11,19 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetBuild'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetTest'
   inputs:
     command: 'test'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPack'
   inputs:
     command: 'pack'
     packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
@@ -30,6 +33,7 @@ steps:
     patchVersion: '0'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishLinux'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -38,6 +42,7 @@ steps:
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishMacOS'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -46,6 +51,7 @@ steps:
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishWindows'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -53,12 +59,21 @@ steps:
     arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
     zipAfterPublish: false
 
+- task: CredScan@3
+  inputs:
+    verboseOutput: true
+
+- task: RoslynAnalyzers@3
+  inputs:
+    userProvideBuildInfo: 'msBuildInfo'
+    msBuildVersion: '16.0'
+    msBuildArchitecture: 'amd64'
+    msBuildCommandline: 'dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
 
 - task: BinSkim@4
   inputs:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
-  continueOnError: true
 
 - task: Semmle@1
   inputs:
@@ -69,7 +84,6 @@ steps:
     timeout: '1800'
     ram: '6384'
     addProjectDirToScanningExclusionList: true
-  continueOnError: true
 
 - task: SdtReport@2
   inputs:
@@ -77,7 +91,6 @@ steps:
     GdnExportAllTools: false
     GdnExportGdnToolBinSkim: true
     GdnExportGdnToolSemmle: true
-  continueOnError: true
 
 - task: PublishSecurityAnalysisLogs@3
   inputs:
@@ -90,7 +103,7 @@ steps:
     Bandit: false
     BinSkim: true
     CodesignValidation: false
-    CredScan: false
+    CredScan: true
     CSRF: false
     ESLint: false
     Flawfinder: false
@@ -99,14 +112,13 @@ steps:
     ModernCop: false
     MSRD: false
     PoliCheck: false
-    RoslynAnalyzers: false
+    RoslynAnalyzers: true
     SDLNativeRules: false
     Semmle: true
     SpotBugs: false
     TSLint: false
     WebScout: false
     ToolLogsNotFoundAction: 'Standard'
-  continueOnError: true
 
 - task: PublishBuildArtifacts@1
   inputs:
