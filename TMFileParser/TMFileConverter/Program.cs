@@ -15,32 +15,6 @@ namespace TMFileConverter
         static async Task Main(string[] args)
         {
             var rootCommand = new RootCommand();
-
-            var helpCommand = new Command("help", "Instructions for using the parser.");
-            helpCommand.Handler = CommandHandler.Create(() =>
-            {
-                Console.WriteLine(" ________________________________________");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|                  TMT                   |");
-                Console.WriteLine("|              File Converter            |");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|                                        |");
-                Console.WriteLine("|________________________________________|");
-                Console.WriteLine();
-                Console.WriteLine();
-                Console.WriteLine("This tool can be used to parse tm7 and tb7 file.");
-                Console.WriteLine();
-                Console.WriteLine("Options - ");
-                Console.WriteLine("json -  Converts the file to json file and saves in given output path.");
-                Console.WriteLine();
-                Console.WriteLine("Instructions - ");
-                Console.WriteLine("tmfileparser --input-path [Path of tm7 or tb7 file] --convert [Convert operation] --output-path [Path to store the output]");
-            });
-            rootCommand.AddCommand(helpCommand);
-
             var inputPathOption = new Option<FileInfo>(
                     "--input-path",
                     "Input tm7 file path.");
@@ -103,9 +77,9 @@ namespace TMFileConverter
                             {
                                 File.WriteAllText(outputFilePath, outputJson);
                             }
-                            catch (Exception e)
+                            catch
                             {
-                                throw new Exception("Error occured while converting.");
+                                throw new Exception("Error occured while converting the file.");
                             }
 
                             Console.WriteLine();

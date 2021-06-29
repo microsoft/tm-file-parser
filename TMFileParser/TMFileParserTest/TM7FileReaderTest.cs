@@ -13,6 +13,7 @@ namespace TMFileParserTest
     {
         private TM7FileReader reader;
         string tm7FilePath = @"Sample\sample1.tm7";
+        string billionLaughsPath = @"Sample\BillionLaughs.tm7";
 
         [TestInitialize]
         public void Initialize()
@@ -38,6 +39,12 @@ namespace TMFileParserTest
         public void Get_Invalid_Category_Test()
         {
             Assert.ThrowsException<InvalidDataException>(() => reader.GetData("invalid"));
+        }
+
+        [TestMethod]
+        public void Billion_Laughs_Test()
+        {
+            Assert.ThrowsException<InvalidOperationException> (() => new TM7FileReader(new FileInfo(billionLaughsPath)));
         }
 
     }
