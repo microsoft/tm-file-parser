@@ -11,16 +11,19 @@ pool:
 
 steps:
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetBuild'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetTest'
   inputs:
     command: 'test'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPack'
   inputs:
     command: 'pack'
     packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
@@ -30,6 +33,7 @@ steps:
     patchVersion: '0'
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishLinux'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -38,6 +42,7 @@ steps:
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishMacOS'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -46,6 +51,7 @@ steps:
     zipAfterPublish: false
 
 - task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishWindows'
   inputs:
     command: 'publish'
     publishWebProjects: false
@@ -53,6 +59,9 @@ steps:
     arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
     zipAfterPublish: false
 
+- task: CredScan@3
+  inputs:
+    verboseOutput: true
 
 - task: BinSkim@4
   inputs:
@@ -87,7 +96,7 @@ steps:
     Bandit: false
     BinSkim: true
     CodesignValidation: false
-    CredScan: false
+    CredScan: true
     CSRF: false
     ESLint: false
     Flawfinder: false
