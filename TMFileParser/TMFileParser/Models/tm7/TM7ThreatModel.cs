@@ -5,19 +5,18 @@ using TMFileParser.Models.tb7;
 namespace TMFileParser.Models.tm7
 {
 
-    /// <remarks/>
     [ExcludeFromCodeCoverage]
     [XmlRoot("ThreatModel")]
     public class TM7ThreatModel
     {
-        [XmlElement("DrawingSurfaceModel")]
+        [XmlElement("DrawingSurfaceList")]
         public TM7DrawingSurfaceList drawingSurfaceList { get; set; }
 
         [XmlElement("MetaInformation")]
         public TM7MetaInformation metaInformation { get; set; }
 
         [XmlElement("Notes")]
-        public string notes { get; set; }
+        public TM7Notes notes { get; set; }
 
         [XmlElement("ThreatInstances")]
         public TM7ThreatInstances threatInstances { get; set; }
@@ -29,7 +28,7 @@ namespace TMFileParser.Models.tm7
         public TM7Validations validations { get; set; }
 
         [XmlElement("KnowledgeBase")]
-        public TB7KnowledgeBase knowledgeBase { get; set; }
+        public TM7KnowledgeBase knowledgeBase { get; set; }
 
         [XmlElement("Profile")]
         public TM7Profile profile { get; set; }

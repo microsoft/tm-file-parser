@@ -2,12 +2,12 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace TMFileParser.Models.tb7
+namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-    public class TB7PropertiesMetaData
+    public class TM7PropertiesMetaData
     {
         [XmlElement("ThreatMetaDatum")]
-        public List<TB7ThreatMetaDatum> threatMetaDatum { get; set; }
+        public List<TM7ThreatMetaDatum> threatMetaDatum { get; set; }
     }
 }

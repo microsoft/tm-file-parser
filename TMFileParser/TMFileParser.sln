@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMFileParser", "TMFileParse
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TMFileParserTest", "TMFileParserTest\TMFileParserTest.csproj", "{D3BBDA04-A8C8-48B1-A606-9412283C5ACC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMFileConverter", "TMFileConverter\TMFileConverter.csproj", "{F09A1BEB-6570-474F-8C45-A01BF5017FC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TMFileConverter", "TMFileConverter\TMFileConverter.csproj", "{3C897A7C-087E-433C-BC1F-44595B15FF01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{D3BBDA04-A8C8-48B1-A606-9412283C5ACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3BBDA04-A8C8-48B1-A606-9412283C5ACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3BBDA04-A8C8-48B1-A606-9412283C5ACC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F09A1BEB-6570-474F-8C45-A01BF5017FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F09A1BEB-6570-474F-8C45-A01BF5017FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F09A1BEB-6570-474F-8C45-A01BF5017FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F09A1BEB-6570-474F-8C45-A01BF5017FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C897A7C-087E-433C-BC1F-44595B15FF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C897A7C-087E-433C-BC1F-44595B15FF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C897A7C-087E-433C-BC1F-44595B15FF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C897A7C-087E-433C-BC1F-44595B15FF01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

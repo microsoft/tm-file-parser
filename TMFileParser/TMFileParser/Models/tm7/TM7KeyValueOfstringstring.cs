@@ -5,9 +5,12 @@ using System.Xml.Serialization;
 namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-    public class TM7DrawingSurfaceList
+    public class TM7KeyValueOfstringstring
     {
-        [XmlElement("DrawingSurfaceModel")]
-        public List<TM7DrawingSurfaceModel> drawingSurfaceModel { get; set; }
+        [XmlElement("Key")]
+        public string key { get; set; }
+        [XmlElement("Value")]
+        public string value { get; set; }
+
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
-namespace TMFileParser.Models.tb7
+namespace TMFileParser.Models.tm7
 {
     [ExcludeFromCodeCoverage]
-    public class TB7ThreatMetaDatum
+    public class TM7ThreatMetaDatum
     {
         [XmlElement("Name")]
         public string name { get; set; }
@@ -13,12 +13,10 @@ namespace TMFileParser.Models.tb7
         [XmlElement("HideFromUI")]
         public bool hideFromUI { get; set; }
         [XmlElement("Values")]
-        public TB7Values values { get; set; }
-        [XmlElement("Description")]
-        public string description { get; set; }
+        public TM7Values values { get; set; }
         [XmlElement("Id")]
         public string id { get; set; }
         [XmlElement("AttributeType")]
-        public int attributeType { get; set; }
+        public decimal attributeType { get; set; }
     }
 }
