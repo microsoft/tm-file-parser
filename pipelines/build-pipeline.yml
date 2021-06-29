@@ -63,6 +63,13 @@ steps:
   inputs:
     verboseOutput: true
 
+- task: RoslynAnalyzers@3
+  inputs:
+    userProvideBuildInfo: 'msBuildInfo'
+    msBuildVersion: '16.0'
+    msBuildArchitecture: 'amd64'
+    msBuildCommandline: 'dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
+
 - task: BinSkim@4
   inputs:
     InputType: 'CommandLine'
@@ -105,7 +112,7 @@ steps:
     ModernCop: false
     MSRD: false
     PoliCheck: false
-    RoslynAnalyzers: false
+    RoslynAnalyzers: true
     SDLNativeRules: false
     Semmle: true
     SpotBugs: false
