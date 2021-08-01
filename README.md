@@ -1,6 +1,6 @@
 # Standard Threat Modeling File Parser
 
-> This repo contains code for the parser to extract data from .tm7 and .tb7 files. 
+This repo contains code for the parser to extract data from .tm7 and .tb7 files. 
 
 The repo contains two projects
 
@@ -9,11 +9,11 @@ The repo contains two projects
 
 # TMFileParser
 
-> TMFileParser is .NET core(Curretly .NET core 5.0) class library published as a nuget package.
+TMFileParser is .NET core(Curretly .NET core 5.0) class library published as a nuget package.
 
 # TMFileConverter
 
-> TMFileParser is crossplatform .NET core console application that can be used to extract data from .tm7 and .tb7 files.
+TMFileParser is crossplatform .NET core console application that can be used to extract data from .tm7 and .tb7 files.
 
 ## Contributing
 
