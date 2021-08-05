@@ -120,6 +120,10 @@ steps:
     WebScout: false
     ToolLogsNotFoundAction: 'Standard'
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.804'
 - task: EsrpCodeSigning@1
   inputs:
     ConnectedServiceName: 'ESRP Signing'
