@@ -59,6 +59,11 @@ steps:
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.0.0'
+
 - task: DotNetCoreCLI@2
   displayName: 'DotNetPack'
   inputs:
@@ -156,6 +161,11 @@ steps:
     TSLint: false
     WebScout: false
     ToolLogsNotFoundAction: 'Standard'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.804'
 
 - task: EsrpCodeSigning@1
   inputs:
