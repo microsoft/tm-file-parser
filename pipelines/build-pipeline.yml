@@ -58,7 +58,7 @@ steps:
   inputs:
     ConnectedServiceName: 'ESRP Signing'
     FolderPath: '$(Build.ArtifactStagingDirectory)'
-    Pattern: '*TMFileParser.dll,*TMFileConverter.exe,*TMFileConverter'
+    Pattern: 'TMFileParser.dll,TMFileConverter.exe'
     signConfigType: 'inlineSignParams'
     inlineOperation:  |
           [
