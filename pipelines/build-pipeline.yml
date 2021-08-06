@@ -163,7 +163,7 @@ steps:
   inputs:
     ConnectedServiceName: 'ESRP Signing'
     FolderPath: '$(Build.BinariesDirectory)'
-    Pattern: 'TMFileParser*.nupkg'
+    Pattern: '*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation:  |
           [
