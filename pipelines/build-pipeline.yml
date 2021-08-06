@@ -22,6 +22,34 @@ steps:
     command: 'test'
     projects: '**/*.csproj'
 
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishLinux'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishMacOS'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishWindows'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+    zipAfterPublish: false
+
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
@@ -73,33 +101,6 @@ steps:
     majorVersion: '1'
     minorVersion: '0'
     patchVersion: '0'
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishLinux'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
-    zipAfterPublish: false
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishMacOS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
-    zipAfterPublish: false
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishWindows'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
-    zipAfterPublish: false
 
 - task: CredScan@3
   inputs:
