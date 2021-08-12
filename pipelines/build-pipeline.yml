@@ -169,20 +169,14 @@ steps:
           [
                   {
                       "KeyCode" : "CP-401405",
-                      "OperationCode" : "SigntoolSign",
-                      "Parameters" : {
-                          "OpusName" : "Microsoft",
-                          "OpusInfo" : "http://www.microsoft.com",
-                          "FileDigest" : "/fd \"SHA256\"",
-                          "PageHash" : "/NPH",
-                          "TimeStamp" : "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
-                      },
+                      "OperationCode" : "NuGetSign",
+                      "Parameters" : {},
                       "ToolName" : "sign",
                       "ToolVersion" : "1.0"
                   },
                   {
                       "KeyCode" : "CP-401405",
-                      "OperationCode" : "SigntoolVerify",
+                      "OperationCode" : "NuGetVerify",
                       "Parameters" : {},
                       "ToolName" : "sign",
                       "ToolVersion" : "1.0"
