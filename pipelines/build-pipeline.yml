@@ -22,43 +22,6 @@ steps:
     command: 'test'
     projects: '**/*.csproj'
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPack'
-  inputs:
-    command: 'pack'
-    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishLinux'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r linux-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/linux-x64'
-    zipAfterPublish: false
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishMacOS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/macOS-arm'
-    zipAfterPublish: false
-
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishWindows'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/windows-x64'
-    zipAfterPublish: false
-
 - task: CredScan@3
   inputs:
     verboseOutput: true
@@ -119,6 +82,83 @@ steps:
     TSLint: false
     WebScout: false
     ToolLogsNotFoundAction: 'Standard'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '2.1.804'
+
+- task: EsrpCodeSigning@1
+  inputs:
+    ConnectedServiceName: 'ESRP Signing'
+    FolderPath: '$(Build.SourcesDirectory)'
+    Pattern: 'TMFileParser.dll'
+    signConfigType: 'inlineSignParams'
+    inlineOperation:  |
+          [
+                  {
+                      "KeyCode" : "CP-230012",
+                      "OperationCode" : "SigntoolSign",
+                      "Parameters" : {
+                          "OpusName" : "Microsoft",
+                          "OpusInfo" : "http://www.microsoft.com",
+                          "FileDigest" : "/fd \"SHA256\"",
+                          "PageHash" : "/NPH",
+                          "TimeStamp" : "/tr \"http://rfc3161.gtm.corp.microsoft.com/TSS/HttpTspServer\" /td sha256"
+                      },
+                      "ToolName" : "sign",
+                      "ToolVersion" : "1.0"
+                  },
+                  {
+                      "KeyCode" : "CP-230012",
+                      "OperationCode" : "SigntoolVerify",
+                      "Parameters" : {},
+                      "ToolName" : "sign",
+                      "ToolVersion" : "1.0"
+                  }
+              ]
+    SessionTimeout: '60'
+    MaxConcurrency: '50'
+    MaxRetryAttempts: '5'
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '5.x'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'pack'
+    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
+    nobuild: true
+    versioningScheme: 'byBuildNumber'
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishLinux'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r linux-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/linux-x64'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishMacOS'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+    zipAfterPublish: false
+
+- task: DotNetCoreCLI@2
+  displayName: 'DotNetPublishWindows'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+    arguments: '-r win-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/windows-x64'
+    zipAfterPublish: false
 
 - task: UseDotNet@2
   inputs:
