@@ -131,7 +131,10 @@ steps:
     command: 'pack'
     packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
     nobuild: true
-    versioningScheme: 'byBuildNumber'
+    versioningScheme: 'byPrereleaseNumber'
+    majorVersion: '1'
+    minorVersion: '0'
+    patchVersion: '0''
 
 - task: DotNetCoreCLI@2
   displayName: 'DotNetPublishLinux'
