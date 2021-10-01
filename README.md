@@ -10,10 +10,23 @@ The repo contains two projects
 ## TMFileParser
 
 TMFileParser is .NET core(Curretly .NET core 5.0) class library published as a nuget package.
+The NuGet package can be consumed from NuGet.org . 
+
+### Features
+
+* Class Library Built on . NET 5.0.
+* Support to parse all the data in .tm7 and .tb7 files or get specific data like Data Flows.
 
 ## TMFileConverter
 
 TMFileParser is crossplatform .NET core console application that can be used to extract data from .tm7 and .tb7 files.
+
+### Features
+
+* Cross - Platform CLI Built on . NET 5.0.
+* Self contained .NET Core Application.
+* Support to convert to JSON.
+* Support to convert all the data in .tm7 and .tb7 files or get specific data like Data Flows.
 
 ## Contributing
 
