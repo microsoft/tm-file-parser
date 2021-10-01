@@ -28,6 +28,10 @@ TMFileParser is crossplatform .NET core console application that can be used to 
 * Support to convert to JSON.
 * Support to convert all the data in .tm7 and .tb7 files or get specific data like Data Flows.
 
+### Instructions
+
+Download the OS specific binaries (Windows, Mac OS, Linus). Extract TMFileConverter.zip. Navigate TMFileConverter from the command prompt or terminal and invoke 'TMFileConverter.exe' or 'TMFileConverter'.
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
