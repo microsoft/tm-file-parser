@@ -1,4 +1,4 @@
-# Standard Threat Modeling File Parser
+# TM File Parser
 
 This repo contains code for the parser to extract data from .tm7 and .tb7 files. 
 
