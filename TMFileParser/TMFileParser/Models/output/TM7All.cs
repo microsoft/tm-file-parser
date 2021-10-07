@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace TMFileParser.Models.output
 {
     [ExcludeFromCodeCoverage]
-    public class TM7Connector
+    public class TM7All
     {
-        public string Name { get; set; }
-        public string DisplayName { get; set; }
+        public List<TM7Diagram> diagrams { get; set; }
+        public List<TM7Threat> threats { get; set; }
     }
 }

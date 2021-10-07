@@ -17,10 +17,11 @@ namespace TMFileParser
     {
         protected string _fileContent;
         private TM7ThreatModel _tmRawData;
-        private List<TM7Diagram> _tmData;
+        private TM7All _tmAllData;
         [ExcludeFromCodeCoverage]
         public TM7FileReader(FileInfo inputFile)
         {
+            this._tmAllData = new TM7All();
             _fileContent = File.ReadAllText(inputFile.FullName);
             this.ReadTMFile();
         }
@@ -34,23 +35,73 @@ namespace TMFileParser
             XmlReader xmlReader = XmlReader.Create(stringReader, settings);
             XmlSerializer serializer = new XmlSerializer(typeof(TM7ThreatModel), "http://schemas.datacontract.org/2004/07/ThreatModeling.Model");
             this._tmRawData = (TM7ThreatModel)serializer.Deserialize(xmlReader);
-            this._tmData = new List<TM7Diagram>();
+            this.ReadDiagramElements();
+            this.ReadThreats();
 
+        }
+
+        private void ReadThreats()
+        {
+            var threats = new List<TM7Threat>();
+            foreach(TM7KeyValueOfstringThreatpc_P0_PhOB threatInstance in _tmRawData.threatInstances.keyValueOfstringThreatpc_P0_PhOB)
+            {
+                var threat = new TM7Threat();
+                threat.id = threatInstance.value.id;
+                threat.diagram = this._tmRawData.drawingSurfaceList.drawingSurfaceModel
+                    .Where(x => x.guid == threatInstance.value.drawingSurfaceGuid).FirstOrDefault()?
+                    .properties.anyType.Where(d => d.type == "StringDisplayAttribute" && d.DisplayName == "Name")
+                    .FirstOrDefault()?.value.value;
+                threat.changedBy = threatInstance.value.changedBy;
+                threat.lastModified = threatInstance.value.ModifiedAt;
+                threat.title = threatInstance.value.properties.keyValueOfstringstring
+                    .Where(x => x.key == "Title").FirstOrDefault()?.value; 
+                threat.category = threatInstance.value.properties.keyValueOfstringstring
+                     .Where(x => x.key == "UserThreatCategory").FirstOrDefault()?.value;
+                threat.description = threatInstance.value.properties.keyValueOfstringstring
+                    .Where(x => x.key == "UserThreatDescription").FirstOrDefault()?.value;
+                threat.justifications = threatInstance.value.properties.keyValueOfstringstring
+                    .Where(x => x.key == "StateInformation").FirstOrDefault()?.value; 
+                threat.interaction = threatInstance.value.properties.keyValueOfstringstring
+                     .Where(x => x.key == "InteractionString").FirstOrDefault()?.value;
+                threat.priority = threatInstance.value.properties.keyValueOfstringstring
+                    .Where(x => x.key == "Priority").FirstOrDefault()?.value;
+
+                threats.Add(threat);
+            }
+            this._tmAllData.threats = threats;
+        }
+
+        private void ReadDiagramElements()
+        {
+            var diagrams = new List<TM7Diagram>();
             foreach (TM7DrawingSurfaceModel model in this._tmRawData.drawingSurfaceList.drawingSurfaceModel)
             {
                 var diagram = new TM7Diagram();
-                diagram.diagram = model.properties.anyType.Where(d => d.type == "StringDisplayAttribute" && d.DisplayName == "Name").FirstOrDefault().value.value;
+                diagram.diagram = model.properties.anyType.Where(d => d.type == "StringDisplayAttribute" && d.DisplayName == "Name")
+                    .FirstOrDefault()?.value.value;
                 var boundaries = new List<TM7Boundary>();
                 var connectors = new List<TM7Connector>();
+                var assets = new List<TM7Asset>();
 
                 foreach (TM7BordersKeyValueOfguidanyType border in model.borders.keyValueOfguidanyType)
                 {
                     if (border.value.type.ToLower() == "BorderBoundary".ToLower() || border.value.type.ToLower() == "LineBoundary".ToLower())
                     {
                         var boundary = new TM7Boundary();
-                        boundary.Name = border.value.properties.anyType.Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault().DisplayName;
-                        boundary.DisplayName = border.value.properties.anyType.Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault().value.value;
+                        boundary.Name = border.value.properties.anyType
+                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
+                        boundary.DisplayName = border.value.properties.anyType
+                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
                         boundaries.Add(boundary);
+                    }
+                    else
+                    {
+                        var asset = new TM7Asset();
+                        asset.Name = border.value.properties.anyType
+                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
+                        asset.DisplayName = border.value.properties.anyType
+                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        assets.Add(asset);
                     }
                 }
 
@@ -59,24 +110,37 @@ namespace TMFileParser
                     if (line.value.type.ToLower() == "BorderBoundary".ToLower() || line.value.type.ToLower() == "LineBoundary".ToLower())
                     {
                         var boundary = new TM7Boundary();
-                        boundary.Name = line.value.properties.anyType.Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault().DisplayName;
-                        boundary.DisplayName = line.value.properties.anyType.Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault().value.value;
+                        boundary.Name = line.value.properties.anyType
+                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
+                        boundary.DisplayName = line.value.properties.anyType
+                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
                         boundaries.Add(boundary);
                     }
-
-                    if (line.value.type.ToLower() == "Connector".ToLower())
+                    else if (line.value.type.ToLower() == "Connector".ToLower())
                     {
                         var connector = new TM7Connector();
-                        connector.Name = line.value.properties.anyType.Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault().DisplayName;
-                        connector.DisplayName = line.value.properties.anyType.Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault().value.value;
+                        connector.Name = line.value.properties.anyType
+                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
+                        connector.DisplayName = line.value.properties.anyType
+                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
                         connectors.Add(connector);
+                    }
+                    else
+                    {
+                        var asset = new TM7Asset();
+                        asset.Name = line.value.properties.anyType
+                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
+                        asset.DisplayName = line.value.properties.anyType
+                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        assets.Add(asset);
                     }
                 }
                 diagram.bondaries = boundaries;
                 diagram.connectors = connectors;
-                _tmData.Add(diagram);
+                diagram.assets = assets;
+                diagrams.Add(diagram);
+                this._tmAllData.diagrams = diagrams;
             }
-
         }
 
         private string PreProcessData(string fileContent)
@@ -91,16 +155,23 @@ namespace TMFileParser
                 case "raw":
                     return this._tmRawData;
                 case "all":
-                    return this._tmData;
+                    return this._tmAllData;
+                case "threats":
+                    return this._tmAllData.threats;
                 case "boundaries":
-                    return this._tmData.Select(x => new { 
+                    return this._tmAllData.diagrams.Select(x => new { 
                         x.diagram,
                         x.bondaries
                     });             
                 case "connectors":
-                    return this._tmData.Select(x => new {
+                    return this._tmAllData.diagrams.Select(x => new {
                         x.diagram,
                         x.connectors
+                    });
+                case "assets":
+                    return this._tmAllData.diagrams.Select(x => new {
+                        x.diagram,
+                        x.assets
                     });
                 default:
                     throw new InvalidDataException("Invalid Get Operation:" + category);

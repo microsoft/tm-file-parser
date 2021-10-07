@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TMFileParser.Models.output
 {
     [ExcludeFromCodeCoverage]
-    public class TM7Connector
+    public class TM7Asset
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
