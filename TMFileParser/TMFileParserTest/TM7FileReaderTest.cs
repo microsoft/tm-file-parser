@@ -17,6 +17,7 @@ namespace TMFileParserTest
         string tm7EmptyFilePath = @"Sample\EmptyDiagram.tm7";
         string tm7NoDiagramFilePath = @"Sample\NoDiagram.tm7";
         string billionLaughsPath = @"Sample\BillionLaughs.tm7";
+        string tm7ThreatsEnabledNullPath = @"Sample\ThreatsEnabledNull.tm7";
 
         [TestInitialize]
         public void Initialize() { }
@@ -55,6 +56,15 @@ namespace TMFileParserTest
             reader = new TM7FileReader(new FileInfo(tm7FilePath));
             var tmData = (TM7ThreatModel)reader.GetData("raw");
             Assert.AreEqual(tmData.version, "4.3");
+        }
+
+        [TestMethod]
+        public void NullThreatsGenerationEnabled_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7ThreatsEnabledNullPath));
+            var tmData = (TM7ThreatModel)reader.GetData("raw");
+            Assert.AreEqual(tmData.version, "4.3");
+            Assert.AreEqual(tmData.threatGenerationEnabled, true);
         }
 
         [TestMethod]
