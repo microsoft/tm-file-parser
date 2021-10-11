@@ -30,7 +30,7 @@ TMFileParser is cross-platform .NET core console application that can be used to
 
 ### Instructions
 
-Download the OS specific binaries (Windows, Mac OS, Linus). Extract TMFileConverter.zip. Navigate TMFileConverter from the command prompt or terminal and invoke 'TMFileConverter.exe' or 'TMFileConverter'.
+Download the OS specific binaries (Windows, Mac OS, Linux). Extract TMFileConverter.zip. Navigate TMFileConverter from the command prompt or terminal and invoke 'TMFileConverter.exe' or 'TMFileConverter'.
 
 	Options:
 		-i, --input-path <input-path> (REQUIRED)      Input tm7 file path.
