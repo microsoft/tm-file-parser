@@ -17,16 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Sample\BillionLaughs.tb7">
+    <None Update="Sample\*.tb7">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Sample\MedicalDeviceTemplate.tb7">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sample\sample1.tm7">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Sample\BillionLaughs.tm7">
+    <None Update="Sample\*.tm7">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

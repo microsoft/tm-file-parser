@@ -22,7 +22,19 @@ namespace TMFileParser.Models.tm7
         public TM7ThreatInstances threatInstances { get; set; }
 
         [XmlElement("ThreatGenerationEnabled")]
-        public bool threatGenerationEnabled { get; set; }
+        private string threatGenerationEnabledString { get; set; }
+
+        public bool threatGenerationEnabled
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.threatGenerationEnabledString))
+                {
+                    return true;
+                }
+                return bool.Parse(this.threatGenerationEnabledString);
+            }
+        }
 
         [XmlElement("Validations")]
         public TM7Validations validations { get; set; }
