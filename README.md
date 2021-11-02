@@ -1,14 +1,54 @@
-# Project
+# TM File Parser
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+This repo contains code for the parser to extract data from .tm7 and .tb7 files. 
 
-As the maintainer of this project, please make a few updates:
+The repo contains two projects
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+- TMFileParser
+- TMFileConverter
+
+## TMFileParser
+
+TMFileParser is .NET core (Currently .NET core 5.0) class library published as a nuget package.
+The NuGet package can be consumed from NuGet.org . 
+
+### Features
+
+* Class Library Built on . NET 5.0.
+* Support to parse all the data in .tm7 and .tb7 files or get specific data like Data Flows.
+
+## TMFileConverter
+
+TMFileParser is cross-platform .NET core console application that can be used to extract data from .tm7 and .tb7 files.
+
+### Features
+
+* Cross-Platform CLI Built on .NET 5.0.
+* Self-contained .NET Core Application.
+* Support to convert to JSON.
+* Support to convert all the data in .tm7 and .tb7 files or get specific data like Data Flows.
+
+### Instructions
+
+Download the OS specific binaries (Windows, Mac OS, Linux). Extract TMFileConverter.zip. Navigate TMFileConverter from the command prompt or terminal and invoke 'TMFileConverter.exe' or 'TMFileConverter'.
+
+	Options:
+		-i, --input-path <input-path> (REQUIRED)      Input tm7 file path.
+		-s, --save-format <save-format> (REQUIRED)    Output file format to convert.
+		-o, --output-path <output-path> (REQUIRED)    Path to store output.
+		-g, --get <get> (REQUIRED)                    Data to be retieved.
+		--version                                     Display version information
+
+	Supported Save Formats:
+		json
+
+	Supported Get Options:
+		raw
+		all											
+		boundaries
+		assets
+		connectors
+		threats
 
 ## Contributing
 
