@@ -47,7 +47,7 @@ namespace TMFileParserTest
         public void Parser_Check_Data()
         {
             parser = new Parser(new FileInfo(tm7FilePath));
-            var tmData = (TM7ThreatModel)parser.GetData("All");
+            var tmData = (TM7ThreatModel)parser.GetData("Raw");
             Assert.AreEqual(tmData.version, "4.3");
         }
     }
