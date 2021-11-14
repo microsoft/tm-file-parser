@@ -2,6 +2,18 @@ parameters:
   - name: nugetVersionParameter
     displayName: NuGet Version
     type: string
+  - name: publishCLIForWindows-x64
+    displayName: Publish for Windows-x64
+    type: boolean
+    default: true
+  - name: publishCLIForLinux-x64
+    displayName: Publish for Linux-x64
+    type: boolean
+    default: true
+  - name: publishCLIForMacOS-arm64
+    displayName: Publish for MacOS-arm64
+    type: boolean
+    default: true
 
 trigger:
 - main
@@ -137,32 +149,35 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'nugetVersion'
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishLinux'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForLinux-x64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishLinux'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+      zipAfterPublish: false
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishMacOS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForMacOS-arm64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishMacOS'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+      zipAfterPublish: false
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishWindows'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForWindows-x64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishWindows'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+      zipAfterPublish: false
 
 - task: UseDotNet@2
   inputs:
