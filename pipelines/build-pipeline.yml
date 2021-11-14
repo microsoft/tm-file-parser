@@ -161,7 +161,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+      arguments: '-r linux-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
       zipAfterPublish: false
 
 - ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
@@ -171,7 +171,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+      arguments: '-r osx.11.0-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
       zipAfterPublish: false
 
 - ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
@@ -181,7 +181,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r win-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+      arguments: '-r win-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
       zipAfterPublish: false
 
 - task: UseDotNet@2
