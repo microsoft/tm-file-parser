@@ -22,7 +22,7 @@ pool:
   vmImage: windows-2019
 
 variables:
-  nugetVersion: ${{ parameters.nugetversion }}
+  nugetVersion: ${{ parameters.nugetVersionParameter }}
 
 steps:
 - task: DotNetCoreCLI@2
