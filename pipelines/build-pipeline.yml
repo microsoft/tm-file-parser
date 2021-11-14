@@ -249,6 +249,27 @@ steps:
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
 
+- ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/linux-x64/TMFileConverter'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/linux-x64'
+
+- ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/macOS-arm/TMFileConverter'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/macOS'
+
+- ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows-x64/TMFileConverter'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
