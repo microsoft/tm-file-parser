@@ -6,7 +6,7 @@ parameters:
     displayName: Publish for Windows-x64
     type: boolean
     default: true
-  - name: publishCLIForLinux-x64
+  - name: publishCLIForLinux_x64
     displayName: Publish for Linux-x64
     type: boolean
     default: true
@@ -149,7 +149,7 @@ steps:
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'nugetVersion'
 
-- ${{ if eq(parameters.publishCLIForLinux-x64, true) }}:
+- ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
   - task: DotNetCoreCLI@2
     displayName: 'DotNetPublishLinux'
     inputs:
