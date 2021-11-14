@@ -14,6 +14,10 @@ parameters:
     displayName: Publish for MacOS-arm64
     type: boolean
     default: true
+  - name: packNuGet
+    displayName: Pack NuGet
+    type: boolean
+    default: true
 
 trigger:
 - main
@@ -141,13 +145,14 @@ steps:
     packageType: 'sdk'
     version: '5.x'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'
-    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
-    nobuild: true
-    versioningScheme: 'byEnvVar'
-    versionEnvVar: 'nugetVersion'
+- ${{ if eq(parameters.packNuGet, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
+      nobuild: true
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'nugetVersion'
 
 - ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
   - task: DotNetCoreCLI@2
