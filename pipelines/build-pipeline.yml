@@ -1,4 +1,7 @@
 parameters:
+  - name: nugetVersionParameter
+    displayName: NuGet Version
+    type: string
   - name: publishCLIForWindows_x64
     displayName: Publish for Windows-x64
     type: boolean
@@ -14,11 +17,7 @@ parameters:
   - name: packNuGet
     displayName: Pack NuGet
     type: boolean
-    default: true
-  - ${{ if eq(parameters.packNuGet, true) }}:
-      - name: nugetVersionParameter
-        displayName: NuGet Version
-        type: string
+    default: true    
 
 trigger:
 - main
