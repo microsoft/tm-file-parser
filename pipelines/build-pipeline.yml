@@ -1,11 +1,16 @@
-# Starter pipeline
-# https://aka.ms/yaml
+parameters:
+  - name: nugetVersionParameter
+    displayName: NuGet Version
+    type: string
 
 trigger:
 - main
 
 pool:
   vmImage: windows-2019
+
+variables:
+  nugetVersion: ${{ parameters.nugetversion }}
 
 steps:
 - task: DotNetCoreCLI@2
@@ -129,10 +134,8 @@ steps:
     command: 'pack'
     packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
     nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'nugetVersion'
 
 - task: DotNetCoreCLI@2
   displayName: 'DotNetPublishLinux'
@@ -203,7 +206,7 @@ steps:
   inputs:
     ConnectedServiceName: 'ESRP Signing'
     FolderPath: '$(Build.ArtifactStagingDirectory)'
-    Pattern: 'TMFileParser*.nupkg'
+    Pattern: 'Microsoft.ThreatModeling.TMFileParser*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation:  |
           [
