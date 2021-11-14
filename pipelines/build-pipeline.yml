@@ -84,7 +84,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '2.1.804'
+    version: '3.x'
 
 - task: EsrpCodeSigning@1
   inputs:
@@ -164,7 +164,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '2.1.804'
+    version: '3.x'
 
 - task: EsrpCodeSigning@1
   inputs:
