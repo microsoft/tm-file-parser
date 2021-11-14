@@ -2,7 +2,7 @@ parameters:
   - name: nugetVersionParameter
     displayName: NuGet Version
     type: string
-  - name: publishCLIForWindows-x64
+  - name: publishCLIForWindows_x64
     displayName: Publish for Windows-x64
     type: boolean
     default: true
@@ -10,7 +10,7 @@ parameters:
     displayName: Publish for Linux-x64
     type: boolean
     default: true
-  - name: publishCLIForMacOS-arm64
+  - name: publishCLIForMacOS_arm64
     displayName: Publish for MacOS-arm64
     type: boolean
     default: true
@@ -159,7 +159,7 @@ steps:
       arguments: '-r linux-x64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
       zipAfterPublish: false
 
-- ${{ if eq(parameters.publishCLIForMacOS-arm64, true) }}:
+- ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
   - task: DotNetCoreCLI@2
     displayName: 'DotNetPublishMacOS'
     inputs:
@@ -169,7 +169,7 @@ steps:
       arguments: '-r osx.11.0-arm64 -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
       zipAfterPublish: false
 
-- ${{ if eq(parameters.publishCLIForWindows-x64, true) }}:
+- ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
   - task: DotNetCoreCLI@2
     displayName: 'DotNetPublishWindows'
     inputs:
