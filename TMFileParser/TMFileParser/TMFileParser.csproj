@@ -8,6 +8,7 @@
     <Authors>Microsoft</Authors>
     <Copyright>© Microsoft Corporation. All rights reserved.</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/microsoft/tm-file-parser</PackageProjectUrl>
   </PropertyGroup>
 
 </Project>
