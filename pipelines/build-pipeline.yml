@@ -256,6 +256,9 @@ steps:
       SourceFolder: '$(Build.ArtifactStagingDirectory)/linux-x64/TMFileConverter'
       Contents: 'TMFileConverter'
       TargetFolder: '$(Build.ArtifactStagingDirectory)/release/linux-x64'
+  - task: CmdLine@2
+    inputs:
+      script: rename $(build.artifactstagingdirectory)/release/linux/TMFileConverter $(build.artifactstagingdirectory)/release/linux/TMFileConverter-linux
 
 - ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
   - task: CopyFiles@2
@@ -263,6 +266,9 @@ steps:
       SourceFolder: '$(Build.ArtifactStagingDirectory)/macOS-arm/TMFileConverter'
       Contents: 'TMFileConverter'
       TargetFolder: '$(Build.ArtifactStagingDirectory)/release/macOS'
+  - task: CmdLine@2
+    inputs:
+      script: rename $(build.artifactstagingdirectory)/release/macOS/TMFileConverter $(build.artifactstagingdirectory)/release/macOS/TMFileConverter-MacOS
 
 - ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
   - task: CopyFiles@2
@@ -285,6 +291,10 @@ steps:
       Contents: |
         *.dll
         *.exe
+  - task: CmdLine@2
+    inputs:
+      script: rename $(build.artifactstagingdirectory)/release/windows-x64/TMFileConverter.zip $(build.artifactstagingdirectory)/release/windows-x64/TMFileConverter-winx64.zip
+
  
 - task: PublishBuildArtifacts@1
   inputs:
