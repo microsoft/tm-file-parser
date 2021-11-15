@@ -162,7 +162,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r linux-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux-x64'
+      arguments: '-r linux-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux'
       zipAfterPublish: false
 
 - ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
@@ -172,7 +172,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r osx.11.0-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS-arm'
+      arguments: '-r osx.11.0-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS'
       zipAfterPublish: false
 
 - ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
@@ -182,7 +182,7 @@ steps:
       command: 'publish'
       publishWebProjects: false
       projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-      arguments: '-r win-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows-x64'
+      arguments: '-r win-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows'
       zipAfterPublish: false
 
 - task: UseDotNet@2
@@ -253,48 +253,46 @@ steps:
 - ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
   - task: CopyFiles@2
     inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)/linux-x64/TMFileConverter'
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/linux/TMFileConverter'
       Contents: 'TMFileConverter'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/linux-x64'
-  - task: CmdLine@2
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux'
+  - task: ArchiveFiles@2
     inputs:
-      script: rename $(build.artifactstagingdirectory)/release/linux/TMFileConverter $(build.artifactstagingdirectory)/release/linux/TMFileConverter-linux
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux.zip'
+      replaceExistingArchive: true
 
 - ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
   - task: CopyFiles@2
     inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)/macOS-arm/TMFileConverter'
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/macOS/TMFileConverter'
       Contents: 'TMFileConverter'
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/macOS'
-  - task: CmdLine@2
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS'
+  - task: ArchiveFiles@2
     inputs:
-      script: rename $(build.artifactstagingdirectory)/release/macOS/TMFileConverter $(build.artifactstagingdirectory)/release/macOS/TMFileConverter-MacOS
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS.zip'
+      replaceExistingArchive: true
 
 - ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
   - task: CopyFiles@2
     inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows-x64/TMFileConverter'
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows/TMFileConverter'
       Contents: |
           *.dll
           TMFileConverter.exe
-      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows'
   - task: ArchiveFiles@2
     inputs:
-      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows'
       includeRootFolder: true
       archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/release/windows-x64/TMFileConverter.zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows.zip'
       replaceExistingArchive: true
-  - task: DeleteFiles@1
-    inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
-      Contents: |
-        *.dll
-        *.exe
-  - task: CmdLine@2
-    inputs:
-      script: rename $(build.artifactstagingdirectory)/release/windows-x64/TMFileConverter.zip $(build.artifactstagingdirectory)/release/windows-x64/TMFileConverter-winx64.zip
-
  
 - task: PublishBuildArtifacts@1
   inputs:
