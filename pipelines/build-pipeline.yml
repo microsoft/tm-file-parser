@@ -1,11 +1,33 @@
-# Starter pipeline
-# https://aka.ms/yaml
+parameters:
+  - name: nugetVersionParameter
+    displayName: NuGet Version
+    type: string
+    default: 1.0.0-dev
+  - name: publishCLIForWindows_x64
+    displayName: Publish for Windows-x64
+    type: boolean
+    default: true
+  - name: publishCLIForLinux_x64
+    displayName: Publish for Linux-x64
+    type: boolean
+    default: true
+  - name: publishCLIForMacOS_arm64
+    displayName: Publish for MacOS-arm64
+    type: boolean
+    default: true
+  - name: packNuGet
+    displayName: Pack NuGet
+    type: boolean
+    default: true    
 
 trigger:
 - main
 
 pool:
   vmImage: windows-2019
+
+variables:
+  nugetVersion: ${{ parameters.nugetVersionParameter }}
 
 steps:
 - task: DotNetCoreCLI@2
@@ -84,7 +106,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '2.1.804'
+    version: '3.x'
 
 - task: EsrpCodeSigning@1
   inputs:
@@ -124,47 +146,49 @@ steps:
     packageType: 'sdk'
     version: '5.x'
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'
-    packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
-    nobuild: true
-    versioningScheme: 'byPrereleaseNumber'
-    majorVersion: '1'
-    minorVersion: '0'
-    patchVersion: '0'
+- ${{ if eq(parameters.packNuGet, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'pack'
+      packagesToPack: 'TMFileParser/TMFileParser/TMFileParser.csproj'
+      nobuild: true
+      versioningScheme: 'byEnvVar'
+      versionEnvVar: 'nugetVersion'
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishLinux'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r linux-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/linux-x64'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishLinux'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r linux-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/linux'
+      zipAfterPublish: false
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishMacOS'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r osx.11.0-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/macOS-arm'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishMacOS'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r osx.11.0-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/macOS'
+      zipAfterPublish: false
 
-- task: DotNetCoreCLI@2
-  displayName: 'DotNetPublishWindows'
-  inputs:
-    command: 'publish'
-    publishWebProjects: false
-    projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
-    arguments: '-r win-x64 -p:PublishSingleFile=False -o $(Build.ArtifactStagingDirectory)/windows-x64'
-    zipAfterPublish: false
+- ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'DotNetPublishWindows'
+    inputs:
+      command: 'publish'
+      publishWebProjects: false
+      projects: 'TMFileParser/TMFileConverter/TMFileConverter.csproj'
+      arguments: '-r win-x64 --self-contained true -p:PublishSingleFile=True -o $(Build.ArtifactStagingDirectory)/windows'
+      zipAfterPublish: false
 
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '2.1.804'
+    version: '3.x'
 
 - task: EsrpCodeSigning@1
   inputs:
@@ -203,7 +227,7 @@ steps:
   inputs:
     ConnectedServiceName: 'ESRP Signing'
     FolderPath: '$(Build.ArtifactStagingDirectory)'
-    Pattern: 'TMFileParser*.nupkg'
+    Pattern: 'Microsoft.ThreatModeling.TMFileParser*.nupkg'
     signConfigType: 'inlineSignParams'
     inlineOperation:  |
           [
@@ -226,6 +250,50 @@ steps:
     MaxConcurrency: '50'
     MaxRetryAttempts: '5'
 
+- ${{ if eq(parameters.publishCLIForLinux_x64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/linux/TMFileConverter'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-linux.zip'
+      replaceExistingArchive: true
+
+- ${{ if eq(parameters.publishCLIForMacOS_arm64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/macOS/TMFileConverter'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-macOS.zip'
+      replaceExistingArchive: true
+
+- ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows/TMFileConverter'
+      Contents: |
+          *.dll
+          TMFileConverter.exe
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows'
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows'
+      includeRootFolder: true
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/TMFileConverter-windows.zip'
+      replaceExistingArchive: true
+ 
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
