@@ -266,7 +266,12 @@ steps:
 - ${{ if eq(parameters.publishCLIForWindows_x64, true) }}:
   - task: CopyFiles@2
     inputs:
-      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows-x64/*'
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows-x64/*.dll'
+      Contents: 'TMFileConverter'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
+  - task: CopyFiles@2
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/windows-x64/TMFileConverter.exe'
       Contents: 'TMFileConverter'
       TargetFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
 
