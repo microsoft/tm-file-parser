@@ -273,11 +273,17 @@ steps:
       TargetFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
   - task: ArchiveFiles@2
     inputs:
-      rootFolderOrFile: '$(Build.BinariesDirectory)/release/windows-x64'
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
       includeRootFolder: true
       archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)/TMFileConverter.zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/release/windows-x64/TMFileConverter.zip'
       replaceExistingArchive: true
+  - task: DeleteFiles@1
+    inputs:
+      SourceFolder: '$(Build.ArtifactStagingDirectory)/release/windows-x64'
+      Contents: |
+        *.dll
+        *.exe
  
 - task: PublishBuildArtifacts@1
   inputs:
