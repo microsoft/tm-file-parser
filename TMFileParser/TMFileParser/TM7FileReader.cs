@@ -135,7 +135,7 @@ namespace TMFileParser
                         assets.Add(asset);
                     }
                 }
-                diagram.bondaries = boundaries;
+                diagram.boundaries = boundaries;
                 diagram.connectors = connectors;
                 diagram.assets = assets;
                 diagrams.Add(diagram);
@@ -161,7 +161,7 @@ namespace TMFileParser
                 case "boundaries":
                     return this._tmAllData.diagrams.Select(x => new { 
                         x.diagram,
-                        x.bondaries
+                        x.boundaries
                     });             
                 case "connectors":
                     return this._tmAllData.diagrams.Select(x => new {
