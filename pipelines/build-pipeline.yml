@@ -23,6 +23,11 @@ parameters:
 trigger:
 - main
 
+pr:
+  branches:
+    include:
+    - main
+
 pool:
   vmImage: windows-2019
 
