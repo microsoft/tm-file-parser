@@ -35,6 +35,12 @@ variables:
   nugetVersion: ${{ parameters.nugetVersionParameter }}
 
 steps:
+
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '7.x'
+
 - task: DotNetCoreCLI@2
   displayName: 'DotNetBuild'
   inputs:
