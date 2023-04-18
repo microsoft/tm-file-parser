@@ -45,7 +45,7 @@ steps:
   displayName: 'DotNetTest'
   inputs:
     command: 'test'
-    projects: '**/*.csproj'
+    projects: '**/TMFileParserTest.csproj'
 
 - task: CredScan@3
   inputs:
