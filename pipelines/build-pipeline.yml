@@ -69,15 +69,15 @@ steps:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
 
-- task: Semmle@1
-  inputs:
-    sourceCodeDirectory: '$(Build.SourcesDirectory)'
-    language: 'csharp'
-    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
-    querySuite: 'Recommended'
-    timeout: '1800'
-    ram: '6384'
-    addProjectDirToScanningExclusionList: true
+# - task: Semmle@1
+#   inputs:
+#     sourceCodeDirectory: '$(Build.SourcesDirectory)'
+#     language: 'csharp'
+#     buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
+#     querySuite: 'Recommended'
+#     timeout: '1800'
+#     ram: '6384'
+#     addProjectDirToScanningExclusionList: true
 
 - task: SdtReport@2
   inputs:
