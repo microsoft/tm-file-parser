@@ -117,7 +117,7 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '3.x'
+    version: '2.x'
 
 - task: EsrpCodeSigning@1
   inputs:
