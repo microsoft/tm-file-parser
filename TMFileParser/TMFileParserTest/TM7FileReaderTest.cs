@@ -36,7 +36,7 @@ namespace TMFileParserTest
             reader = new TM7FileReader(new FileInfo(tm7EmptyFilePath));
             var tmData = (TM7All)reader.GetData("all");
             Assert.AreEqual(tmData.diagrams.FirstOrDefault().assets.Count(), 0);
-            Assert.AreEqual(tmData.diagrams.FirstOrDefault().bondaries.Count(), 0);
+            Assert.AreEqual(tmData.diagrams.FirstOrDefault().boundaries.Count(), 0);
             Assert.AreEqual(tmData.diagrams.FirstOrDefault().connectors.Count(), 0);
             Assert.AreEqual(tmData.threats.Count(), 0);
         }
