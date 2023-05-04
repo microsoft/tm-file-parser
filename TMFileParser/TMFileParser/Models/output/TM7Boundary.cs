@@ -18,5 +18,8 @@ namespace TMFileParser.Models.output
         public decimal Width { get; set; }
         public decimal Height { get; set; }
         public List<TM7Asset> Assets { get; set; }
+        public List<TM7Connector> CrossingDataflows { get; set; }
+        public List<TM7Connector> Connectors { get; set; }
+        public List<TM7Boundary> ChildBoundaries { get; set; }
     }
 }
