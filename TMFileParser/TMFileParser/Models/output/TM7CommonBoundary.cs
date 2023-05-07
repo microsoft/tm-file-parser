@@ -10,7 +10,7 @@ namespace TMFileParser.Models.output
     [ExcludeFromCodeCoverage]
     public class TM7CommonBoundary
     {
-        public TM7Boundary Boundary { get; set; }
+        public TM7BoundaryBasic Boundary { get; set; }
         public List<TM7Asset> CommonAssets { get; set; }
     }
 }

@@ -159,22 +159,7 @@ namespace TMFileParser
                             && x.Top > boundary.Top
                             && x.Top + x.Height < boundary.Top + boundary.Height).ToList();
 
-                        var commonBoundaries = boundaries.Where(x => x.Left >= boundary.Left - x.Width
-                             && x.Left + x.Width <= boundary.Left + boundary.Width + x.Width
-                             && x.Top >= boundary.Top - x.Height
-                             && x.Top + x.Height <= boundary.Top + boundary.Height + x.Height
-                             && !boundary.ChildBoundaries.Contains(x)
-                             && x != boundary).ToList();
-
-                        boundary.CommonBoundaries = new List<TM7CommonBoundary>();
-
-                        foreach (TM7Boundary commonBoundary in commonBoundaries) {
-                            var common = new TM7CommonBoundary();
-                            common.Boundary = commonBoundary;
-
-                            boundary.CommonBoundaries.Add(common);
-                            
-                        }
+                        
 
                         boundary.Connectors = new List<TM7Connector>();
                         boundary.CrossingDataflows = new List<TM7Connector>();
@@ -194,8 +179,27 @@ namespace TMFileParser
 
                 foreach (TM7Boundary boundary in boundaries) {
                     if (boundary.Type == "BorderBoundary") {
+                        var commonBoundaries = boundaries.Where(x => x.Left >= boundary.Left - x.Width
+                             && x.Left + x.Width <= boundary.Left + boundary.Width + x.Width
+                             && x.Top >= boundary.Top - x.Height
+                             && x.Top + x.Height <= boundary.Top + boundary.Height + x.Height
+                             && !boundary.ChildBoundaries.Contains(x)
+                             && x != boundary).ToList();
+
+                        boundary.CommonBoundaries = new List<TM7CommonBoundary>();
+
+                        foreach (TM7Boundary commonBoundary in commonBoundaries)
+                        {
+                            var common = new TM7CommonBoundary();
+                            common.Boundary = new TM7BoundaryBasic(commonBoundary);
+
+                            boundary.CommonBoundaries.Add(common);
+
+                        }
                         foreach (TM7CommonBoundary commonBoundary in boundary.CommonBoundaries) {
-                            commonBoundary.CommonAssets = boundary.Assets.ToList().Intersect(commonBoundary.Boundary.Assets.ToList()).ToList();
+                            if (boundary.Assets != null && commonBoundary.Boundary.Assets != null) {
+                                commonBoundary.CommonAssets = boundary.Assets?.ToList().Intersect(commonBoundary.Boundary.Assets?.ToList()).ToList();
+                            }
                         }
                     }
                 }
