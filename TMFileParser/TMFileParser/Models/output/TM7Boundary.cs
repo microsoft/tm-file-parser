@@ -12,6 +12,7 @@ namespace TMFileParser.Models.output
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
+        public string Guid { get; set; }
         public string Type { get; set; }
         public decimal Left { get; set; }
         public decimal Top { get; set; }

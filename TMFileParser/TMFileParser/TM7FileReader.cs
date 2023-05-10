@@ -91,6 +91,7 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         boundary.DisplayName = border.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        boundary.Guid = border.value.guid;
                         boundary.Type = border.value.type;
                         boundary.Height = border.value.height;
                         boundary.Width = border.value.width;
@@ -105,6 +106,7 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         asset.DisplayName = border.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        asset.Guid = border.value.guid;
                         asset.Height = border.value.height;
                         asset.Width = border.value.width;
                         asset.Left = border.value.left;
@@ -124,6 +126,7 @@ namespace TMFileParser
                         boundary.DisplayName = line.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
                         boundary.Type = line.value.type;
+                        boundary.Guid = line.value.guid;
                         boundaries.Add(boundary);
                     }
                     else if (line.value.type.ToLower() == "Connector".ToLower())
@@ -135,6 +138,7 @@ namespace TMFileParser
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
                         connector.SourceAsset = assets.Where(x => x.Guid == line.value.sourceGuid).FirstOrDefault();
                         connector.TargetAsset = assets.Where(x => x.Guid == line.value.targetGuid).FirstOrDefault();
+                        connector.Guid= line.value.guid;
                         connectors.Add(connector);
                     }
                 }
