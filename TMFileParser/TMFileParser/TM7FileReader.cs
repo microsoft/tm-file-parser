@@ -37,13 +37,12 @@ namespace TMFileParser
             this._tmRawData = (TM7ThreatModel)serializer.Deserialize(xmlReader);
             this.ReadDiagramElements();
             this.ReadThreats();
-
         }
 
         private void ReadThreats()
         {
             var threats = new List<TM7Threat>();
-            foreach(TM7KeyValueOfstringThreatpc_P0_PhOB threatInstance in _tmRawData.threatInstances.keyValueOfstringThreatpc_P0_PhOB)
+            foreach (TM7KeyValueOfstringThreatpc_P0_PhOB threatInstance in _tmRawData.threatInstances.keyValueOfstringThreatpc_P0_PhOB)
             {
                 var threat = new TM7Threat();
                 threat.id = threatInstance.value.id;
@@ -54,13 +53,13 @@ namespace TMFileParser
                 threat.changedBy = threatInstance.value.changedBy;
                 threat.lastModified = threatInstance.value.ModifiedAt;
                 threat.title = threatInstance.value.properties.keyValueOfstringstring
-                    .Where(x => x.key == "Title").FirstOrDefault()?.value; 
+                    .Where(x => x.key == "Title").FirstOrDefault()?.value;
                 threat.category = threatInstance.value.properties.keyValueOfstringstring
                      .Where(x => x.key == "UserThreatCategory").FirstOrDefault()?.value;
                 threat.description = threatInstance.value.properties.keyValueOfstringstring
                     .Where(x => x.key == "UserThreatDescription").FirstOrDefault()?.value;
                 threat.justifications = threatInstance.value.properties.keyValueOfstringstring
-                    .Where(x => x.key == "StateInformation").FirstOrDefault()?.value; 
+                    .Where(x => x.key == "StateInformation").FirstOrDefault()?.value;
                 threat.interaction = threatInstance.value.properties.keyValueOfstringstring
                      .Where(x => x.key == "InteractionString").FirstOrDefault()?.value;
                 threat.priority = threatInstance.value.properties.keyValueOfstringstring
@@ -92,6 +91,12 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         boundary.DisplayName = border.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        boundary.Guid = border.value.guid;
+                        boundary.Type = border.value.type;
+                        boundary.Height = border.value.height;
+                        boundary.Width = border.value.width;
+                        boundary.Left = border.value.left;
+                        boundary.Top = border.value.top;
                         boundaries.Add(boundary);
                     }
                     else
@@ -101,6 +106,12 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         asset.DisplayName = border.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        asset.Guid = border.value.guid;
+                        asset.Height = border.value.height;
+                        asset.Width = border.value.width;
+                        asset.Left = border.value.left;
+                        asset.Top = border.value.top;
+                        asset.Guid = border.value.guid;
                         assets.Add(asset);
                     }
                 }
@@ -114,6 +125,8 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         boundary.DisplayName = line.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        boundary.Type = line.value.type;
+                        boundary.Guid = line.value.guid;
                         boundaries.Add(boundary);
                     }
                     else if (line.value.type.ToLower() == "Connector".ToLower())
@@ -123,18 +136,79 @@ namespace TMFileParser
                             .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
                         connector.DisplayName = line.value.properties.anyType
                             .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
+                        connector.SourceAsset = assets.Where(x => x.Guid == line.value.sourceGuid).FirstOrDefault();
+                        connector.TargetAsset = assets.Where(x => x.Guid == line.value.targetGuid).FirstOrDefault();
+                        connector.Guid= line.value.guid;
                         connectors.Add(connector);
                     }
-                    else
+                }
+
+                foreach (TM7Boundary boundary in boundaries)
+                {
+                    if (boundary.Type == "BorderBoundary")
                     {
-                        var asset = new TM7Asset();
-                        asset.Name = line.value.properties.anyType
-                            .Where(x => x.type == "HeaderDisplayAttribute").FirstOrDefault()?.DisplayName;
-                        asset.DisplayName = line.value.properties.anyType
-                            .Where(x => x.type == "StringDisplayAttribute" && x.DisplayName == "Name").FirstOrDefault()?.value.value;
-                        assets.Add(asset);
+                        boundary.Assets = assets.Where(x => x.Left > boundary.Left
+                            && x.Left + x.Width < boundary.Left + boundary.Width
+                            && x.Top > boundary.Top
+                            && x.Top + x.Height < boundary.Top + boundary.Height).ToList();
+
+                        boundary.AssetsOnBoundary = assets.Where(x => x.Left >= boundary.Left - x.Width
+                            && x.Left + x.Width <= boundary.Left + boundary.Width + x.Width
+                            && x.Top >= boundary.Top - x.Height
+                            && x.Top + x.Height <= boundary.Top + boundary.Height + x.Height
+                            &&!boundary.Assets.Contains(x)).ToList();
+
+                        boundary.ChildBoundaries = boundaries.Where(x => x.Left > boundary.Left
+                            && x.Left + x.Width < boundary.Left + boundary.Width
+                            && x.Top > boundary.Top
+                            && x.Top + x.Height < boundary.Top + boundary.Height).ToList();
+
+                        
+
+                        boundary.Connectors = new List<TM7Connector>();
+                        boundary.CrossingDataflows = new List<TM7Connector>();
+                        foreach (TM7Connector connector in connectors)
+                        {
+                            bool containsSource = boundary.Assets.Contains(connector.SourceAsset);
+                            bool containsTarget = boundary.Assets.Contains(connector.TargetAsset);
+                            if (containsSource && containsTarget) {
+                                boundary.Connectors.Add(connector);
+                            } else if ((!containsSource && containsTarget) || (containsSource && !containsTarget))
+                            {
+                                boundary.CrossingDataflows.Add(connector);
+                            }
+                        }
+                    } 
+                }
+
+                foreach (TM7Boundary boundary in boundaries) {
+                    if (boundary.Type == "BorderBoundary") {
+                        var commonBoundaries = boundaries.Where(x => x.Left >= boundary.Left - x.Width
+                             && x.Left + x.Width <= boundary.Left + boundary.Width + x.Width
+                             && x.Top >= boundary.Top - x.Height
+                             && x.Top + x.Height <= boundary.Top + boundary.Height + x.Height
+                             && !boundary.ChildBoundaries.Contains(x)
+                             && x != boundary).ToList();
+
+                        boundary.CommonBoundaries = new List<TM7CommonBoundary>();
+
+                        foreach (TM7Boundary commonBoundary in commonBoundaries)
+                        {
+                            var common = new TM7CommonBoundary();
+                            common.Boundary = new TM7BoundaryBasic(commonBoundary);
+
+                            boundary.CommonBoundaries.Add(common);
+
+                        }
+                        foreach (TM7CommonBoundary commonBoundary in boundary.CommonBoundaries) {
+                            if (boundary.Assets != null && commonBoundary.Boundary.Assets != null) {
+                                commonBoundary.CommonAssets = boundary.Assets?.ToList().Intersect(commonBoundary.Boundary.Assets?.ToList()).ToList();
+                            }
+                        }
                     }
                 }
+
+               
                 diagram.boundaries = boundaries;
                 diagram.connectors = connectors;
                 diagram.assets = assets;
@@ -159,16 +233,16 @@ namespace TMFileParser
                 case "threats":
                     return this._tmAllData.threats;
                 case "boundaries":
-                    return this._tmAllData.diagrams.Select(x => new { 
+                    return this._tmAllData.diagrams.Select(x => new {
                         x.diagram,
                         x.boundaries
-                    });             
+                    });
                 case "connectors":
                     return this._tmAllData.diagrams.Select(x => new {
                         x.diagram,
                         x.connectors
                     });
-                case "assets":
+                 case "assets":
                     return this._tmAllData.diagrams.Select(x => new {
                         x.diagram,
                         x.assets

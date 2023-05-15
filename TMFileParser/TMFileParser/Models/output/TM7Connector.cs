@@ -12,5 +12,8 @@ namespace TMFileParser.Models.output
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }
+        public string Guid { get; set; }
+        public TM7Asset SourceAsset { get; set; }
+        public TM7Asset TargetAsset { get; set; }
     }
 }

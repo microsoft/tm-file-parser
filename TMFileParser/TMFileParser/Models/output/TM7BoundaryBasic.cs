@@ -8,8 +8,19 @@ using System.Threading.Tasks;
 namespace TMFileParser.Models.output
 {
     [ExcludeFromCodeCoverage]
-    public class TM7Boundary
+    public class TM7BoundaryBasic
     {
+        public TM7BoundaryBasic(TM7Boundary boundary) {
+            this.Name = boundary.Name;
+            this.Guid = boundary.Guid;
+            this.Top = boundary.Top;
+            this.Left = boundary.Left;
+            this.Width = boundary.Width;
+            this.Height = boundary.Height;
+            this.DisplayName = boundary.DisplayName;
+            this.Type = boundary.Type;
+            this.Assets = boundary.Assets;
+        }
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Guid { get; set; }
@@ -19,10 +30,5 @@ namespace TMFileParser.Models.output
         public decimal Width { get; set; }
         public decimal Height { get; set; }
         public List<TM7Asset> Assets { get; set; }
-        public List<TM7Asset> AssetsOnBoundary { get; set; }
-        public List<TM7Connector> CrossingDataflows { get; set; }
-        public List<TM7Connector> Connectors { get; set; }
-        public List<TM7Boundary> ChildBoundaries { get; set; }
-        public List<TM7CommonBoundary> CommonBoundaries { get; set; }
     }
 }

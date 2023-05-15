@@ -6,6 +6,8 @@ using TMFileParser;
 using TMFileParser.Models.tm7;
 using System.Collections.Generic;
 using TMFileParser.Models.output;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using System.Reflection.PortableExecutable;
 
 namespace TMFileParserTest
 {
@@ -14,6 +16,7 @@ namespace TMFileParserTest
     {
         private TM7FileReader reader;
         string tm7FilePath = @"Sample\sample1.tm7";
+        string tm7BoundariesFilePath = @"Sample\sample2.tm7";
         string tm7EmptyFilePath = @"Sample\EmptyDiagram.tm7";
         string tm7NoDiagramFilePath = @"Sample\NoDiagram.tm7";
         string billionLaughsPath = @"Sample\BillionLaughs.tm7";
@@ -116,5 +119,50 @@ namespace TMFileParserTest
             Assert.ThrowsException<InvalidOperationException> (() => new TM7FileReader(new FileInfo(billionLaughsPath)));
         }
 
+        [TestMethod]
+        public void Get_Child_Boundaries_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7BoundariesFilePath));
+            var tmData = reader.GetData("all") as TM7All;
+            var childBoundary = tmData.diagrams.FirstOrDefault().boundaries.FirstOrDefault().ChildBoundaries;
+            Assert.AreEqual(childBoundary.Count, 1);
+            Assert.AreEqual(childBoundary.FirstOrDefault().Name, "Machine Trust Boundary");
+            Assert.AreEqual(childBoundary.FirstOrDefault().Assets.FirstOrDefault().Name, "IoT Device");
+        }
+
+        public void Get_Common_Boundaries_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7BoundariesFilePath));
+            var tmData = reader.GetData("all") as TM7All;
+            var commonAsset = tmData.diagrams.FirstOrDefault().boundaries.FirstOrDefault().CommonBoundaries.ElementAt(1).CommonAssets.FirstOrDefault();
+            Assert.AreEqual(commonAsset.Name, "Azure Storage");
+            Assert.AreEqual(commonAsset.Guid, "053cade6-9792-456b-b5f3-901bf035c686");
+        }
+
+        public void Get_Connector_Source_And_Target_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7BoundariesFilePath));
+            var tmData = reader.GetData("all") as TM7All;
+            var sourceAsset = tmData.diagrams.FirstOrDefault().connectors.FirstOrDefault().SourceAsset;
+            var targetAsset = tmData.diagrams.FirstOrDefault().connectors.FirstOrDefault().TargetAsset;
+            Assert.AreEqual(sourceAsset.Name, "Azure Key Vault");
+            Assert.AreEqual(targetAsset.Name, "Azure Cosmos DB");
+        }
+
+        public void Get_Crossing_Dataflow_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7BoundariesFilePath));
+            var tmData = reader.GetData("all") as TM7All;
+            var connector = tmData.diagrams.FirstOrDefault().boundaries.ElementAt(1).CrossingDataflows.FirstOrDefault();
+            Assert.AreEqual(connector.Name, "Request");
+        }
+
+        public void Get_Assets_On_Boundaries_Test()
+        {
+            reader = new TM7FileReader(new FileInfo(tm7BoundariesFilePath));
+            var tmData = reader.GetData("all") as TM7All;
+            var asset = tmData.diagrams.FirstOrDefault().boundaries.FirstOrDefault().AssetsOnBoundary.FirstOrDefault();
+            Assert.AreEqual(asset.Name, "Azure Key Vault");
+        }
     }
 }
