@@ -84,7 +84,7 @@ steps:
     GdnExportHtmlFile: true
     GdnExportAllTools: false
     GdnExportGdnToolBinSkim: true
-    GdnExportGdnToolSemmle: true
+    GdnExportGdnToolSemmle: false
 
 - task: PublishSecurityAnalysisLogs@3
   inputs:
@@ -108,7 +108,7 @@ steps:
     PoliCheck: false
     RoslynAnalyzers: true
     SDLNativeRules: false
-    Semmle: false
+    Semmle: true
     SpotBugs: false
     TSLint: false
     WebScout: false
