@@ -33,7 +33,7 @@ pool:
 
 variables:
   nugetVersion: ${{ parameters.nugetVersionParameter }}
-  Codeql.Enabled: true
+  Codeql.Enabled: $[eq(variables['Build.SourceBranch'], 'refs/heads/azure-pipelines-codeql-tasks')]
 
 steps:
 
