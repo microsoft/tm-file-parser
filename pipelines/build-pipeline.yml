@@ -33,8 +33,11 @@ pool:
 
 variables:
   nugetVersion: ${{ parameters.nugetVersionParameter }}
+  Codeql.Enabled: true
 
 steps:
+
+- task: CodeQL3000Init@0
 
 - task: UseDotNet@2
   inputs:
@@ -68,8 +71,6 @@ steps:
   inputs:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
-
-- task: CodeQL3000Init@0
 
 - task: Semmle@1
   inputs:
