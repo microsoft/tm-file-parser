@@ -69,6 +69,8 @@ steps:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
 
+- task: CodeQL3000Init@0
+
 - task: Semmle@1
   inputs:
     sourceCodeDirectory: '$(Build.SourcesDirectory)'
@@ -78,6 +80,8 @@ steps:
     timeout: '1800'
     ram: '6384'
     addProjectDirToScanningExclusionList: true
+
+- task: CodeQL3000Finalize@0
 
 - task: SdtReport@2
   inputs:
