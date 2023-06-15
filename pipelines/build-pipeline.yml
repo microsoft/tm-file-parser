@@ -23,6 +23,13 @@ parameters:
 trigger:
 - main
 
+schedules:
+  - cron: '0 0 * * *'
+    displayName: Daily build
+    branches:
+      include:
+      - main
+
 pr:
   branches:
     include:
@@ -33,8 +40,11 @@ pool:
 
 variables:
   nugetVersion: ${{ parameters.nugetVersionParameter }}
+  Codeql.Enabled: true
 
 steps:
+
+- task: CodeQL3000Init@0
 
 - task: UseDotNet@2
   inputs:
@@ -68,16 +78,6 @@ steps:
   inputs:
     InputType: 'CommandLine'
     arguments: 'analyze $(Build.SourcesDirectory)\* --recurse --sympath "Srv*http://msdl.microsoft.com/download/symbols" --verbose'
-
-- task: Semmle@1
-  inputs:
-    sourceCodeDirectory: '$(Build.SourcesDirectory)'
-    language: 'csharp'
-    buildCommandsString: 'dotnet.exe clean $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln && dotnet.exe build $(Build.SourcesDirectory)\TMFileParser\TMFileParser.sln'
-    querySuite: 'Recommended'
-    timeout: '1800'
-    ram: '6384'
-    addProjectDirToScanningExclusionList: true
 
 - task: SdtReport@2
   inputs:
@@ -310,4 +310,6 @@ steps:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: CodeQL3000Finalize@0
 
